@@ -669,6 +669,36 @@ document.body.appendChild(d);
 <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
+
+<title>Supabase HTML Connection</title>
+    <!-- 1. Load the Supabase Client Library via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Supabase is Connected!</h1>
+
+    <script>
+        // 2. Initialize the Supabase client
+        const supabaseUrl = 'https://zuhevuyotcigibupboaz.supabase.co'; 
+        const supabaseKey = 'sb_publishable_pP4Oz7XuBpHBRhUC-PYl6Q_Ju5u95Pf';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // 3. Simple Test: Fetch data from a table named 'tasks'
+        async function testConnection() {
+            const { data, error } = await supabase
+                .from('tasks')
+                .select('*');
+
+            if (error) {
+                console.error('Error connecting:', error.message);
+            } else {
+                console.log('Successfully connected! Data:', data);
+            }
+        }
+
+        testConnection();
+    </script>
+
 <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 </body>
 
