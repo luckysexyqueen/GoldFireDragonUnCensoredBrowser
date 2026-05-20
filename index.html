@@ -38,34 +38,10 @@ min-height: 100vh;
 color: #e9d5ff;
 }
 
-<title>CroxyProxy Google 우회 검색</title>
-    <style>
-        body { font-family: Arial; padding: 20px; }
-        input { padding: 12px; width: 70%; font-size: 18px; }
-        button { padding: 12px 20px; font-size: 18px; }
-        .result { margin-top: 20px; }
-    </style>
-</head>
-<body>
-    <h2>CroxyProxy로 구글 검색 우회 (새 탭)</h2>
-    
-    <form onsubmit="goProxy(); return false;">
-        <input type="text" id="search" placeholder="검색할 키워드 입력" autocomplete="off">
-        <button type="submit">CroxyProxy로 검색하기</button>
-    </form>
-
-    <script>
-        function goProxy() {
-            const query = document.getElementById('search').value.trim();
-            if (!query) return;
-            
-            // CroxyProxy IP + Google 검색
-            const proxyUrl = `https://www.croxyproxy.com/_ko/`;
-            window.open(proxyUrl, '_blank');   // 새 탭으로 열림
         }
     </script>
     
-  <input type="text" name="q" placeholder="http://www.google.co.jp/search?q=${encodeURIComponent(query)}&gl=jp&hl=ko&safe=off" required>
+  <input type="text" name="q" placeholder="search..." required>
   <button type="submit">Search</button>
 </form>
 
