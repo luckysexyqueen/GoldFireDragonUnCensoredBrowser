@@ -1,0 +1,12 @@
+{
+    "name": "GoldFireDragonBrowserUncensored",
+    "main": "index.html",
+    "js-flags": "--expose-gc",
+    "window": {
+        "title": "GoldFireDragonBrowserUncensored",
+        "toolbar": true,
+        "width": 1280,
+        "height": 1280,
+        "icon": "icon/icon.png"
+    }
+}
