@@ -1,13 +1,13 @@
 <!DOCTYPE html><html lang="ko"><head>
 <meta charset="UTF-8"/>
-<meta name="geo.region" content="JP">
-<meta name="geo.country" content="JP">
-<meta name="geo.placename" content="Tokyo">
-<meta name="geo.position" content="Tokyo">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="geo.region" content="JP"/>
+<meta name="geo.country" content="JP"/>
+<meta name="geo.placename" content="Tokyo"/>
+<meta name="geo.position" content="Tokyo"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
 <meta name="HandheldFriendly" content="true"/>
 <meta name="MobileOptimized" content="true"/>
-<link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
+<link rel="stylesheet" type="text/css" href="fonts/gamefont.css"/>
 <title>GoldFireDragonUnCensoredBrowser</title>
 <script>
 (function(){
@@ -657,7 +657,7 @@ async function handleRequest(request) {
       &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0&#39;,
       &#39;Accept-Language&#39;: &#39;ko-KR,ko;q=0.9,ja;q=0.8,en;q=0.7&#39;,
       &#39;X-Forwarded-For&#39;: &#39;203.0.113.&#39; + Math.floor(Math.random()*255),
-      &#39;Referer&#39;: &#39;https://www.google.co.jp/?&gl=jp%hl=ko&safe=off#39;,
+      &#39;Referer&#39;: &#39;https://www.google.co.jp/?&amp;gl=jp%hl=ko&amp;safe=off#39;,
     }
   })
 
@@ -1079,7 +1079,7 @@ deploy_jp:
     <button id="search-btn" class="px-8 py-3 bg-purple-600 hover:bg-purple-700 active:scale-95 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-purple-900/50">FireDragon 검색</button>
     <button id="lucky-btn" class="px-8 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all">I&#39;m Feeling Lucky</button>
     <button id="bypass-btn" class="px-8 py-3 bg-gradient-to-r from-red-700 to-orange-600 hover:from-red-600 hover:to-orange-500 active:scale-95 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-red-900/50">🔓 우회검색</button>
-    <a href="https://www.croxyproxy.com/ko&gl=jp&hl=ko&safe=off" target="_blank" rel="noopener" class="px-8 py-3 bg-gradient-to-r from-violet-700 to-purple-600 hover:from-violet-600 hover:to-purple-500 active:scale-95 rounded-xl text-sm font-semibold transition-all text-white no-underline flex items-center gap-2">
+    <a href="https://www.croxyproxy.com/ko&amp;gl=jp&amp;hl=ko&amp;safe=off" target="_blank" rel="noopener" class="px-8 py-3 bg-gradient-to-r from-violet-700 to-purple-600 hover:from-violet-600 hover:to-purple-500 active:scale-95 rounded-xl text-sm font-semibold transition-all text-white no-underline flex items-center gap-2">
       🌐 막힌사이트
     </a>
   </div>
@@ -1943,7 +1943,7 @@ try {
 
 /* 3. Navigator UA 스푸핑 */
 try {
-  var FD_UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0';
+  var FD_UA='Mozilla/9.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firedragon/135.0';
   Object.defineProperty(navigator,'userAgent',{get:function(){return FD_UA;},configurable:true});
   Object.defineProperty(navigator,'appVersion',{get:function(){return '5.0 (Windows)';},configurable:true});
   Object.defineProperty(navigator,'platform',{get:function(){return 'Win32';},configurable:true});
@@ -2098,7 +2098,8 @@ window.addEventListener('load',function(){
   getData()
 </script>
 
+
+
 <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 </body>
-
 </html>
