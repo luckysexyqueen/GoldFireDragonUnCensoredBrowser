@@ -65,7 +65,7 @@ color: #e9d5ff;
         }
     </script>
     
-  <input type="text" name="q" placeholder="Search..." required>
+  <input type="text" name="q" placeholder="http://www.google.co.jp/search?q=${encodeURIComponent(query)}&gl=jp&hl=ko&safe=off" required>
   <button type="submit">Search</button>
 </form>
 
