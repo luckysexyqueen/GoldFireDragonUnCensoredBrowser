@@ -2103,4 +2103,27 @@ window.addEventListener('load',function(){
 
 <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 
-</body></html>
+<script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
+
+<script>
+  const supabaseUrl = 'https://zuhevuyotcigibupboaz.supabase.co'
+  const supabaseKey = 'sb_publishable_pP4Oz7XuBpHBRhUC-PYl6Q_Ju5u95Pf'
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+
+  // Example: Test connection by fetching data
+  async function getData() {
+    const { data, error } = await supabase
+      .from('your_table_name')
+      .select('*')
+    
+    if (error) console.error('Error:', error)
+    else console.log('Data:', data)
+  }
+
+  getData()
+</script>
+
+<script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
+</body>
+
+</html>
