@@ -38,7 +38,7 @@ min-height: 100vh;
 color: #e9d5ff;
 }
 
-<form action="<script>
+<script>
         function redirectToProxy(event) {
             event.preventDefault(); // 기본 폼 제출 방지
 
@@ -59,7 +59,7 @@ color: #e9d5ff;
                 window.location.href = proxyUrl + encodedTargetUrl;
             }
         }
-    </script>">
+    </script>
     
   <input type="text" name="q" placeholder="Search..." required>
   <button type="submit">Search</button>
