@@ -55,8 +55,8 @@ color: #e9d5ff;
                 // 4. 검색어와 검색엔진 URL을 인코딩
                 const encodedTargetUrl = encodeURIComponent(searchEngineUrl + query);
 
-                // 5. 프록시 URL과 인코딩된 타겟 URL을 결합하여 이동
-                window.location.href = proxyUrl + encodedTargetUrl;
+                // 5. 프록시 URL과 인코딩된 검색엔진 URL을 결합하여 이동
+                window.location.href = proxyUrl + encodedsearchEngineUrl;
             }
         }
     </script>
