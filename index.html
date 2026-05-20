@@ -26,6 +26,82 @@
 <meta name="twitter:image" content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg"/>
 <meta name="twitter:url" content="https://www.onspace.ai"/>
 
+<script>
+(function(){
+  var vp = document.querySelector('meta[name=viewport]') || document.createElement('meta');
+  vp.name = 'viewport';
+  var sw = screen.width || window.innerWidth || 375;
+  if (sw < 1280) {
+    var s = (sw / 1280).toFixed(4);
+    vp.content = 'width=1280, initial-scale=' + s + ', minimum-scale=' + s + ', maximum-scale=3.0, user-scalable=yes';
+  } else {
+    vp.content = 'width=1280, initial-scale=1.0';
+  }
+  if (!document.querySelector('meta[name=viewport]')) document.head.appendChild(vp);
+})();
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 콘텐츠가 들어갈 메인 컨테이너 */
+#app-container {
+    background-color: #fff;
+    transition: width 0.3s, height 0.3s;
+}
+
+/* 가로 모드 (화면 너비가 높이보다 클 때) */
+@media (orientation: landscape) {
+    #app-container {
+        width: 1500px;
+        height: 900px;
+    }
+}
+
+/* 세로 모드 (화면 높이가 너비보다 클 때) */
+@media (orientation: portrait) {
+    #app-container {
+        width: 900px;
+        height: 1500px;
+    }
+}
+// 전체화면 요청 함수 (브라우저 정책상 사용자 클릭 후 실행 가능)
+function triggerFullscreen() {
+    const docEl = document.documentElement;
+    if (docEl.requestFullscreen) {
+        docEl.requestFullscreen();
+    } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen(); // 사파리 대응
+    }
+}
+
+// 화면 회전 감지 및 크기 재조정
+function handleOrientationChange() {
+    // 필요 시 회전 방향에 따른 추가 스크립트 로직을 여기에 작성하세요.
+    window.scrollTo(0, 0); 
+}
+
+// 이벤트 리스너 등록
+window.addEventListener("orientationchange", handleOrientationChange);
+window.addEventListener("resize", handleOrientationChange);
+
+// 화면의 아무 곳이나 처음 누르면 전체화면 모드 실행
+document.addEventListener("click", () => {
+    triggerFullscreen();
+}, { once: true });
+</script>
+
 <!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- Font Awesome -->
