@@ -2064,5 +2064,35 @@ window.addEventListener('load',function(){
 
 
 <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
+
+<!-- Include the Supabase JS library via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // 1. Replace with your actual project details from the Supabase Dashboard
+  const supabaseUrl = 'https://zuhevuyotcigibupboaz.supabase.co'
+  const supabaseKey = 'sb_publishable_pP4Oz7XuBpHBRhUC-PYl6Q_Ju5u95Pf'
+
+  // 2. Initialize the Supabase client
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+
+  // 3. Example usage: Fetch data from a table named 'todos'
+  async function getData() {
+    const { data, error } = await supabase
+      .from('todos')
+      .select('*')
+
+    if (error) {
+      console.error('Error fetching data:', error)
+    } else {
+      console.log('Connected! Data:', data)
+    }
+  }
+
+  getData()
+</script>
+
+<script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 </body>
+
 </html>
