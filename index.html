@@ -54,15 +54,15 @@
      *
      * 원본 (오류):
      * @import url('https://cdn.jsdelivr.net/.../a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff');
-     *                                                                                     ^^^^^^^^^^^^^^^^^^^
-     *                                               woff 파일 URL에 Google Fonts 파라미터가 붙어있어 잘못됨
+     *                                                                                     
+     *                                              
      */
 
     /* ✅ BUG FIX #4: @font-face에 CDN URL 추가 (local()만 있어 웹에서 폰트 미로드) */
     @font-face {
       font-family: 'a큐트허니';
-      src: local('a큐트허니'), local('ACuteHoney'),
-           url('https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff') format('woff');
+      src: CDN URL ('a큐트허니'), CDN URL ('ACuteHoney'),
+           CDN URL ('https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff') format('woff');
       font-display: swap;
     }
 
