@@ -53,7 +53,7 @@
      * CSS 파싱 오류 발생. @font-face로 직접 로드하는 방식으로 교체.
      *
      * 원본 (오류):
-     * @import url('https://cdn.jsdelivr.net/.../a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff+Script&display=swap');
+     * @import url('https://cdn.jsdelivr.net/.../a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff');
      *                                                                                     ^^^^^^^^^^^^^^^^^^^
      *                                               woff 파일 URL에 Google Fonts 파라미터가 붙어있어 잘못됨
      */
@@ -833,5 +833,7 @@
     }
   });
   </script>
+<script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 </body>
+
 </html>
