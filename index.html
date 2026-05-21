@@ -21,7 +21,7 @@
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="GoldFireDragon UnCensroed Browser"/>
+<meta name="twitter:title"ㅁ content="GoldFireDragon UnCensroed Browser"/>
 <meta name="twitter:description" content="빠르고 안전한 프리미엄 브라우저"/>
 <meta name="twitter:image" content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg"/>
 <meta name="twitter:url" content="https://www.onspace.ai"/>
@@ -365,6 +365,13 @@ transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
 I&#39;m Feeling Lucky
 </button>
 </div>
+<button id="막힌 사이트 열기" class="px-8 py-3 bg-transparent border border-purple-400
+hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold
+transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
+I&#39;m 막힌 사이트 열기
+</button>
+</div>
+
 
 <!-- Quick Links -->
 <nav class="mt-12 flex gap-5 flex-wrap justify-center" aria-label="빠른 링크">
@@ -466,13 +473,29 @@ window.open(url, '_blank');
 return;
 }
 
-var base   = 'https://croxyproxy.com/_ko';
-var params = 'gl=jp&hl=ko&safe=off&nfpr=1&filter=0&pws=0';
+/* ── GoldFireDragon UnCensroed Browser 검색  ── */
+var base   = 'http://google.co.jp/?';
+var params = '&gl=jp&hl=ko&safe=off&nfpr=1&filter=0&pws=0';
 var suffix = lucky ? '&btnI=1' : '';
 window.open(base + '?q=' + encodeURIComponent(query) + '&' + params + suffix, '_blank');
 }
 
-searchBtn.addEventListener('click', function () { openSearch(input.value, false); });
+GoldFireDragon UnCensroed Browser 검색  Btn.addEventListener('click', function () { openSearch(input.value, false); });
+luckyBtn.addEventListener('click',  function () { openSearch(input.value, true);  });
+input.addEventListener('keydown', function (e) {
+if (e.key === 'Enter') { openSearch(input.value, false); hideSuggestions(); }
+if (e.key === 'Escape') { hideSuggestions(); }
+});
+
+
+/* ── 막힌 사이트 열기  ── */
+var base   = 'https://croxyproxy.com/_ko';
+var params = '&gl=jp&hl=ko&safe=off&nfpr=1&filter=0&pws=0';
+var suffix = lucky ? '&btnI=1' : '';
+window.open(base + '?q=' + encodeURIComponent(query) + '&' + params + suffix, '_blank');
+}
+
+막힌 사이트 열기Btn.addEventListener('click', function () { openSearch(input.value, false); });
 luckyBtn.addEventListener('click',  function () { openSearch(input.value, true);  });
 input.addEventListener('keydown', function (e) {
 if (e.key === 'Enter') { openSearch(input.value, false); hideSuggestions(); }
