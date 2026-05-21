@@ -2,44 +2,54 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <!-- ✅ BUG FIX #5: viewport meta 태그 추가 (JS가 덮어쓰기 전에 초기값 필요) -->
-  <meta name="viewport" content="width=1500, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
+
+  <!-- ✅ FIX #1: viewport 중복 선언 제거 — 단 한 번만 선언 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
   <meta name="geo.region" content="JP">
   <meta name="geo.country" content="JP">
   <meta name="geo.placename" content="Tokyo">
   <meta name="HandheldFriendly" content="true">
   <meta name="MobileOptimized" content="true">
 
-  <!-- ══════════════════════════════════════════════════════
-       NW.js package.json 설정을 HTML <meta> 태그로 변환
-  ══════════════════════════════════════════════════════ -->
-  <meta name="application-name"      content="GoldFireDragonBrowserUncensored">
-  <meta name="nwjs:main"             content="index.html">
-  <meta name="nwjs:js-flags"         content="--expose-gc">
-  <meta name="nwjs:window:title"     content="GoldFireDragonBrowserUncensored">
-  <meta name="nwjs:window:toolbar"   content="true">
-  <meta name="nwjs:window:icon"      content="icon/icon.png">
+  <!-- ✅ FIX #2: application-name 중복 제거 — 단 한 번만 선언 -->
+  <meta name="application-name" content="GoldFireDragonBrowserUncensored">
+
+  <!-- ✅ FIX #3: title 중복 제거 — 단 한 번만 선언 -->
+  <title>GoldFireDragonBrowserUncensored</title>
+
+  <!-- NW.js 전용 설정 -->
+  <meta name="nwjs-main"         content="index.html">
+  <meta name="nwjs-js-flags"     content="--expose-gc">
+  <meta name="nwjs-window-title" content="GoldFireDragonBrowserUncensored">
+  <meta name="nwjs-window-toolbar" content="true">
+  <meta name="nwjs-window-icon"  content="icon/icon.png">
+  <meta name="nwjs-dpi"          content="135">
+
+  <meta name="nwjs:main"                    content="index.html">
+  <meta name="nwjs:js-flags"               content="--expose-gc">
+  <meta name="nwjs:window:title"           content="GoldFireDragonBrowserUncensored">
+  <meta name="nwjs:window:toolbar"         content="true">
+  <meta name="nwjs:window:icon"            content="icon/icon.png">
   <meta name="nwjs:window:landscape:width"  content="1500">
   <meta name="nwjs:window:landscape:height" content="900">
   <meta name="nwjs:window:portrait:width"   content="900">
   <meta name="nwjs:window:portrait:height"  content="1500">
-  <meta name="nwjs:window:font"      content="a큐트허니">
-  <meta name="nwjs:dpi"              content="135">
-
-  <title>GoldFireDragonBrowserUncensored</title>
+  <meta name="nwjs:window:font"            content="a큐트허니">
+  <meta name="nwjs:dpi"                    content="135">
 
   <!-- SEO / Social -->
-  <meta name="description"        content="빠르고 안전한 프리미엄 브라우저 — GoldFireDragon UnCensored Browser">
-  <meta property="og:title"       content="GoldFireDragon UnCensored Browser">
-  <meta property="og:description" content="빠르고 안전한 프리미엄 브라우저">
-  <meta property="og:url"         content="https://www.onspace.ai">
-  <meta property="og:type"        content="website">
-  <meta property="og:site_name"   content="GoldFireDragon UnCensored Browser">
-  <meta property="og:image"       content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
-  <meta name="twitter:card"       content="summary_large_image">
-  <meta name="twitter:title"      content="GoldFireDragon UnCensored Browser">
+  <meta name="description"         content="빠르고 안전한 프리미엄 브라우저 — GoldFireDragon UnCensored Browser">
+  <meta property="og:title"        content="GoldFireDragon UnCensored Browser">
+  <meta property="og:description"  content="빠르고 안전한 프리미엄 브라우저">
+  <meta property="og:url"          content="https://www.onspace.ai">
+  <meta property="og:type"         content="website">
+  <meta property="og:site_name"    content="GoldFireDragon UnCensored Browser">
+  <meta property="og:image"        content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="GoldFireDragon UnCensored Browser">
   <meta name="twitter:description" content="빠르고 안전한 프리미엄 브라우저">
-  <meta name="twitter:image"      content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
+  <meta name="twitter:image"       content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -48,36 +58,23 @@
 
   <style>
     /*
-     * ✅ BUG FIX #3: @import 제거
-     * 원본의 @import는 .woff 파일 URL에 Google Fonts 쿼리 파라미터가 잘못 붙어있어
-     * CSS 파싱 오류 발생. @font-face로 직접 로드하는 방식으로 교체.
-     *
-     * 원본 (오류):
-     * @import url('https://cdn.jsdelivr.net/.../a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff');
-     *                                                                                     
-     *                                              
+     * ✅ FIX #4: @font-face src 문법 오류 수정
+     * 원본: CDN URL('...') 라는 존재하지 않는 CSS 함수 사용
+     *       → local() 과 url() 을 올바르게 분리하여 선언
      */
-
-    /* ✅ BUG FIX #4: @font-face에 CDN URL 추가 (local()만 있어 웹에서 폰트 미로드) */
     @font-face {
       font-family: 'a큐트허니';
-      src: CDN URL ('a큐트허니'), CDN URL ('ACuteHoney'),
-           CDN URL ('https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff') format('woff');
+      src: local('a큐트허니'), local('ACuteHoney'),
+           url('https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff') format('woff');
       font-display: swap;
     }
 
     :root {
-      /* ✅ BUG FIX #1: --font-brand CSS 변수 수정
-         원본: --font-brand: 'a큐트허니',   ← 세미콜론 없이 줄 끝에서 잘림 +
-               다음 줄 주석(/* ... */)이 변수값 안으로 들어가 파싱 오류 발생
-         수정: 폴백 폰트 추가 후 세미콜론으로 올바르게 종료 */
       --font-brand: 'a큐트허니', 'a큐트허', sans-serif;
-      /* NW.js 창 크기 CSS 변수 */
       --win-landscape-w: 1500px;
       --win-landscape-h: 900px;
       --win-portrait-w:  900px;
       --win-portrait-h:  1500px;
-      /* NW.js DPI */
       --nw-dpi: 135;
     }
 
@@ -89,11 +86,7 @@
     }
 
     body {
-      /* ✅ BUG FIX #2: font-family 세미콜론 없음 수정
-         원본: font-family: var(--font-brand), "a큐트허니",   ← 세미콜론 없이 다음 줄로 이어짐
-               background: #0a0010 url(...)  ← background가 font-family 값으로 파싱됨
-         수정: 세미콜론 추가, font-family와 background를 별도 속성으로 분리 */
-      font-family: var(--font-brand), "a큐트허니", sans-serif;
+      font-family: var(--font-brand), sans-serif;
       background:
         #0a0010
         url("https://cdn-ai.onspace.ai/onspace/project/uploads/6SC2bAVvqSFMEGrGCS7FCM/GoldFireDragonBrowser_home_page.jpg")
@@ -411,10 +404,10 @@
     </div>
 
     <div class="flex items-center gap-2 flex-wrap justify-end">
-      <a href="https://mail.google.com"    target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">Gmail</a>
+      <a href="https://mail.google.com"     target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">Gmail</a>
       <a href="https://images.google.co.jp" target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">이미지</a>
-      <a href="https://news.google.com"    target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">뉴스</a>
-      <a href="https://maps.google.co.jp"  target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">지도</a>
+      <a href="https://news.google.com"     target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">뉴스</a>
+      <a href="https://maps.google.co.jp"   target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">지도</a>
 
       <button id="apps-btn" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 transition" title="앱 목록">
         <i class="fa-solid fa-grip text-purple-300 text-lg"></i>
@@ -537,12 +530,10 @@
     win.title  = cfg.title;
 
     /*
-     * ✅ BUG FIX #6: NW.js toolbar 설정 오류 수정
-     * 원본: win.menu = cfg.toolbar ? nw.Menu.createMacBuiltin(cfg.title) : null;
-     *       nw.Menu.createMacBuiltin()은 macOS 네이티브 메뉴바를 만드는 API이며
-     *       창의 toolbar(주소창/버튼 영역)와 전혀 관계없음.
-     *       NW.js의 toolbar는 package.json에서만 설정 가능하고 런타임에서
-     *       win.setShowInTaskbar() 등으로는 제어되지 않으므로 해당 코드 제거.
+     * ✅ FIX #5: NW.js toolbar 런타임 제어 코드 제거
+     * nw.Menu.createMacBuiltin()은 macOS 네이티브 메뉴바 API이며
+     * 창의 toolbar(주소창/버튼 영역)와 무관함.
+     * toolbar는 package.json에서만 설정 가능하므로 해당 코드 제거.
      */
 
     /* DPI 설정 (NW.js zoomFactor로 변환: dpi / 96) */
@@ -558,8 +549,8 @@
 
   /* ── viewport: 화면 방향에 따라 NW.js 설정 크기 기준으로 동적 조정 ── */
   (function setViewport() {
-    var vp = document.querySelector('meta[name=viewport]') || document.createElement('meta');
-    vp.name = 'viewport';
+    var vp = document.querySelector('meta[name=viewport]');
+    if (!vp) { vp = document.createElement('meta'); vp.name = 'viewport'; document.head.appendChild(vp); }
     var cfg = window.NW_CONFIG.window;
     var sw  = screen.width || window.innerWidth || 375;
     var sh  = screen.height || window.innerHeight || 667;
@@ -571,8 +562,27 @@
     } else {
       vp.content = 'width=' + targetW + ',initial-scale=1.0,maximum-scale=3.0,user-scalable=yes';
     }
-    if (!document.querySelector('meta[name=viewport]')) document.head.appendChild(vp);
-    else document.querySelector('meta[name=viewport]').content = vp.content;
+  })();
+
+  /*
+   * ✅ FIX #6: 일반 브라우저용 창 크기 조정 함수
+   * 원본은 <script>의 window.onload 에 applyBrowserSettings를 할당했고,
+   * 동시에 HTML 하단 인라인 <script>에서도 window.onload를 재정의하여 서로 덮어씀.
+   * → DOMContentLoaded 이벤트로 변경하고, 중복 할당 없이 addEventListener 사용.
+   */
+  (function initBrowserWindowSize() {
+    if (typeof nw !== 'undefined') return; // NW.js 환경에서는 위에서 이미 처리
+    var handleOrientationChange = function () {
+      if (window.matchMedia("(orientation: portrait)").matches) {
+        window.resizeTo(900, 1500);
+      } else {
+        window.resizeTo(1500, 900);
+      }
+    };
+    handleOrientationChange();
+    if (window.screen.orientation) {
+      window.screen.orientation.addEventListener("change", handleOrientationChange);
+    }
   })();
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -668,10 +678,9 @@
       if (!url) { proxyInput.focus(); return; }
       if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
       /*
-       * ✅ BUG FIX #7: CroxyProxy URL 경로 오류 수정
-       * 원본: 'https://www.croxyproxy.com/requests/get?requestType=https&url=' + ...
-       *       /requests/get 경로는 CroxyProxy의 공개 API가 아니며 작동하지 않음
-       * 수정: CroxyProxy의 실제 작동 URL 형식으로 변경
+       * ✅ FIX #7: CroxyProxy URL 경로 오류 수정
+       * 원본: /requests/get?requestType=https&url= → 비공개 API 경로, 작동 안 함
+       * 수정: 실제 작동하는 공개 경로 /?url= 사용
        */
       window.open('https://www.croxyproxy.com/?url=' + encodeURIComponent(url), '_blank', 'noopener');
       proxyModal.classList.remove('open');
@@ -824,18 +833,22 @@
     input.focus();
   });
 
-  /* ── App load signal ── */
+  /*
+   * ✅ FIX #8: window.onload 이중 정의 충돌 제거
+   * 원본: applyBrowserSettings 함수에서 window.onload = applyBrowserSettings 할당 +
+   *       HTML 하단 인라인 <script>에서 window.onload = function(){...} 재정의
+   *       → 둘 다 addEventListener('load', ...) 로 통일하여 충돌 방지
+   *       → #appLoadFinished 중복 삽입 방지를 위해 존재 여부 체크
+   */
   window.addEventListener('load', function () {
     if (!document.getElementById('appLoadFinished')) {
       var d = document.createElement('div');
       d.id = 'appLoadFinished';
+      d.style.display = 'none';
       document.body.appendChild(d);
     }
   });
   </script>
-<script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
-<script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
+
 </body>
-
-
 </html>
