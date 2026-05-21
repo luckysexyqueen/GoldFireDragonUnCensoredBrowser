@@ -2,8 +2,6 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <!-- ✅ BUG FIX #5: viewport meta 태그 추가 (JS가 덮어쓰기 전에 초기값 필요) -->
-  <meta name="viewport" content="width=1500, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
   <meta name="geo.region" content="JP">
   <meta name="geo.country" content="JP">
   <meta name="geo.placename" content="Tokyo">
@@ -12,6 +10,21 @@
 
   <!-- ══════════════════════════════════════════════════════
        NW.js package.json 설정을 HTML <meta> 태그로 변환
+       원본 JSON:
+       {
+         "name": "GoldFireDragonBrowserUncensored",
+         "main": "index.html",
+         "js-flags": "--expose-gc",
+         "dpi": 135,
+         "window": {
+           "title": "GoldFireDragonBrowserUncensored",
+           "toolbar": true,
+           "landscape": { "width": 1500, "height": 900 },
+           "portrait":  { "width": 900,  "height": 1500 },
+           "icon": "icon/icon.png",
+           "font": "a큐트허니"
+         }
+       }
   ══════════════════════════════════════════════════════ -->
   <meta name="application-name"      content="GoldFireDragonBrowserUncensored">
   <meta name="nwjs:main"             content="index.html">
@@ -47,31 +60,18 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    /*
-     * ✅ BUG FIX #3: @import 제거
-     * 원본의 @import는 .woff 파일 URL에 Google Fonts 쿼리 파라미터가 잘못 붙어있어
-     * CSS 파싱 오류 발생. @font-face로 직접 로드하는 방식으로 교체.
-     *
-     * 원본 (오류):
-     * @import url('https://cdn.jsdelivr.net/.../a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff');
-     *                                                                                     ^^^^^^^^^^^^^^^^^^^
-     *                                               woff 파일 URL에 Google Fonts 파라미터가 붙어있어 잘못됨
-     */
+    /* ══ 커스텀 폰트 : a큐트허니 (NW.js window.font 설정 반영) ══
+       로컬 폰트가 없을 경우 Google Fonts 기반 한국어 폰트로 폴백               */
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
 
-    /* ✅ BUG FIX #4: @font-face에 CDN URL 추가 (local()만 있어 웹에서 폰트 미로드) */
     @font-face {
       font-family: 'a큐트허니';
-      src: local('a큐트허니'), local('ACuteHoney'),
-           url('https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff') format('woff');
+      src: local('a큐트허니'), local('ACuteHoney');
       font-display: swap;
     }
 
     :root {
-      /* ✅ BUG FIX #1: --font-brand CSS 변수 수정
-         원본: --font-brand: 'a큐트허니',   ← 세미콜론 없이 줄 끝에서 잘림 +
-               다음 줄 주석(/* ... */)이 변수값 안으로 들어가 파싱 오류 발생
-         수정: 폴백 폰트 추가 후 세미콜론으로 올바르게 종료 */
-      --font-brand: 'a큐트허니', 'Noto Sans KR', sans-serif;
+      --font-brand: 'a큐트허니', 'Nanum Pen Script', cursive;
       /* NW.js 창 크기 CSS 변수 */
       --win-landscape-w: 1500px;
       --win-landscape-h: 900px;
@@ -89,11 +89,7 @@
     }
 
     body {
-      /* ✅ BUG FIX #2: font-family 세미콜론 없음 수정
-         원본: font-family: var(--font-brand), "a큐트허니",   ← 세미콜론 없이 다음 줄로 이어짐
-               background: #0a0010 url(...)  ← background가 font-family 값으로 파싱됨
-         수정: 세미콜론 추가, font-family와 background를 별도 속성으로 분리 */
-      font-family: var(--font-brand), "a큐트허니", sans-serif;
+      font-family: var(--font-brand), Arial, sans-serif;
       background:
         #0a0010
         url("https://cdn-ai.onspace.ai/onspace/project/uploads/6SC2bAVvqSFMEGrGCS7FCM/GoldFireDragonBrowser_home_page.jpg")
@@ -405,6 +401,7 @@
 
     <div class="flex items-center gap-2 flex-wrap">
       <div class="japan-wifi">🇯🇵 Japan WiFi IP Connected • Proxy Active</div>
+      <!-- NW.js 앱 정보 배지 (클릭 시 패널 토글) -->
       <button id="nwjs-badge-btn" class="nw-badge" title="NW.js 설정 보기">
         ⚙️ NW.js &nbsp;|&nbsp; 1500×900 &nbsp;|&nbsp; DPI 135 &nbsp;|&nbsp; a큐트허니
       </button>
@@ -509,7 +506,7 @@
 
   <!-- ══════════ SCRIPTS ══════════ -->
   <script>
-  /* ── NW.js package.json 설정값 ── */
+  /* ── NW.js package.json 설정값 (런타임에서 참조 가능하도록 JS 객체화) ── */
   window.NW_CONFIG = {
     name:     "GoldFireDragonBrowserUncensored",
     main:     "index.html",
@@ -527,7 +524,7 @@
 
   /* ── NW.js 환경 감지 & 실제 창 크기 적용 ── */
   (function applyNWWindowSize() {
-    if (typeof nw === 'undefined') return;
+    if (typeof nw === 'undefined') return;   /* 브라우저 환경이면 건너뜀 */
     var cfg = window.NW_CONFIG.window;
     var win = nw.Window.get();
     var isLandscape = screen.width >= screen.height;
@@ -535,22 +532,14 @@
     win.width  = size.width;
     win.height = size.height;
     win.title  = cfg.title;
-
-    /*
-     * ✅ BUG FIX #6: NW.js toolbar 설정 오류 수정
-     * 원본: win.menu = cfg.toolbar ? nw.Menu.createMacBuiltin(cfg.title) : null;
-     *       nw.Menu.createMacBuiltin()은 macOS 네이티브 메뉴바를 만드는 API이며
-     *       창의 toolbar(주소창/버튼 영역)와 전혀 관계없음.
-     *       NW.js의 toolbar는 package.json에서만 설정 가능하고 런타임에서
-     *       win.setShowInTaskbar() 등으로는 제어되지 않으므로 해당 코드 제거.
-     */
-
+    if (cfg.toolbar !== undefined) win.menu = cfg.toolbar ? nw.Menu.createMacBuiltin(cfg.title) : null;
     /* DPI 설정 (NW.js zoomFactor로 변환: dpi / 96) */
     if (window.NW_CONFIG.dpi) {
       var zoomFactor = window.NW_CONFIG.dpi / 96;
       win.zoomLevel = Math.log(zoomFactor) / Math.log(1.2);
       console.log('[NW.js] dpi:', window.NW_CONFIG.dpi, '→ zoomLevel:', win.zoomLevel.toFixed(3));
     }
+    /* expose-gc (js-flags) 는 nw 실행 인자로만 적용되므로 여기서는 표시만 */
     console.log('[NW.js] js-flags:', window.NW_CONFIG.jsFlags);
     console.log('[NW.js] dpi:', window.NW_CONFIG.dpi);
     console.log('[NW.js] window size applied:', size);
@@ -667,13 +656,7 @@
       var url = proxyInput.value.trim();
       if (!url) { proxyInput.focus(); return; }
       if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-      /*
-       * ✅ BUG FIX #7: CroxyProxy URL 경로 오류 수정
-       * 원본: 'https://www.croxyproxy.com/requests/get?requestType=https&url=' + ...
-       *       /requests/get 경로는 CroxyProxy의 공개 API가 아니며 작동하지 않음
-       * 수정: CroxyProxy의 실제 작동 URL 형식으로 변경
-       */
-      window.open('https://www.croxyproxy.com/?url=' + encodeURIComponent(url), '_blank', 'noopener');
+      window.open('https://www.croxyproxy.com/requests/get?requestType=https&url=' + encodeURIComponent(url), '_blank', 'noopener');
       proxyModal.classList.remove('open');
     });
     proxyInput.addEventListener('keydown', function (e) {
@@ -806,6 +789,7 @@
       var d = document.documentElement;
       if (d.requestFullscreen) d.requestFullscreen();
       else if (d.webkitRequestFullscreen) d.webkitRequestFullscreen();
+      document.removeEventListener('click', triggerFS);
     }, { once: true });
 
     /* ── 화면 방향 변경 시 NW.js 창 크기 재적용 ── */
