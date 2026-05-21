@@ -54,15 +54,15 @@
      *
      * 원본 (오류):
      * @import url('https://cdn.jsdelivr.net/.../a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff');
-     *                                                                                     
-     *                                              
+     *                                                                                     ^^^^^^^^^^^^^^^^^^^
+     *                                               woff 파일 URL에 Google Fonts 파라미터가 붙어있어 잘못됨
      */
 
     /* ✅ BUG FIX #4: @font-face에 CDN URL 추가 (local()만 있어 웹에서 폰트 미로드) */
     @font-face {
       font-family: 'a큐트허니';
-      src: CDN URL ('a큐트허니'), CDN URL ('ACuteHoney'),
-           CDN URL ('https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff') format('woff');
+      src: local('a큐트허니'), local('ACuteHoney'),
+           url('https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff') format('woff');
       font-display: swap;
     }
 
@@ -71,7 +71,7 @@
          원본: --font-brand: 'a큐트허니',   ← 세미콜론 없이 줄 끝에서 잘림 +
                다음 줄 주석(/* ... */)이 변수값 안으로 들어가 파싱 오류 발생
          수정: 폴백 폰트 추가 후 세미콜론으로 올바르게 종료 */
-      --font-brand: 'a큐트허니', 'a큐트허', sans-serif;
+      --font-brand: 'a큐트허니', 'Noto Sans KR', sans-serif;
       /* NW.js 창 크기 CSS 변수 */
       --win-landscape-w: 1500px;
       --win-landscape-h: 900px;
@@ -834,8 +834,6 @@
   });
   </script>
 <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
-<script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 </body>
-
 
 </html>
