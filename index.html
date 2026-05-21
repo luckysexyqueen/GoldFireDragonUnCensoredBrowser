@@ -3,6 +3,31 @@
   <head>
     <meta charset="UTF-8" />
 
+    <!-- All fonts settings -->
+        <style>
+        /* 1. 폰트 등록 (jsDelivr CDN 연결 완료) */
+        @font-face {
+            font-family: 'a큐티허니';
+            src: url("https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@main/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.ttf");
+            src: url("https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@main/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff");
+        }
+
+        /* 2. 텍스트에 폰트 적용하기 (예시: 전체 글꼴 변경) */
+        body {
+            font-family: 'a큐티허니', sans-serif;
+            padding: 20px;
+        }
+
+        /* 3. 비디오 재생 버튼 숨기기 설정 */
+        .IIV::-webkit-media-controls-play-button,
+        video::-webkit-media-controls-start-playback-button {
+            opacity: 0;
+            pointer-events: none;
+            width: 5px;
+        }
+    </style>
+    
+
     <!-- Common environment settings -->
     <meta name="toolbar" content="true" />
     <meta name="maximize-window-fullscreen" content="true" />
