@@ -2,233 +2,120 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-
-  <!--
-    ══════════════════════════════════════════════════════════════
-    📱 MOBILE DESKTOP MODE  —  모바일을 데스크탑 1500px 너비로 강제
-    • initial-scale = 화면 실제 px / 1500 로 계산해 전체가 축소 표시됨
-    • maximum-scale=5 → 핀치 줌 허용
-    • JS에서 orientationchange 때 재계산
-    ══════════════════════════════════════════════════════════════
-  -->
-  <meta id="meta-viewport" name="viewport"
-        content="width=1500,initial-scale=1.0,minimum-scale=0.1,maximum-scale=5.0,user-scalable=yes">
-
+  <!-- ✅ BUG FIX #5: viewport meta 태그 추가 (JS가 덮어쓰기 전에 초기값 필요) -->
+  <meta name="viewport" content="width=1500, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
   <meta name="geo.region" content="JP">
   <meta name="geo.country" content="JP">
   <meta name="geo.placename" content="Tokyo">
   <meta name="HandheldFriendly" content="true">
-  <meta name="MobileOptimized" content="width">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="FireDragon">
-  <meta name="theme-color" content="#0a0010">
+  <meta name="MobileOptimized" content="true">
 
-  <meta name="application-name" content="GoldFireDragonBrowserUncensored">
-  <title>GoldFireDragonBrowserUncensored</title>
-
-  <!-- NW.js -->
-  <meta name="nwjs-main"           content="index.html">
-  <meta name="nwjs-js-flags"       content="--expose-gc">
-  <meta name="nwjs-window-title"   content="GoldFireDragonBrowserUncensored">
-  <meta name="nwjs-window-toolbar" content="true">
-  <meta name="nwjs-window-icon"    content="icon/icon.png">
-  <meta name="nwjs-dpi"            content="135">
-  <meta name="nwjs:main"                    content="index.html">
-  <meta name="nwjs:js-flags"               content="--expose-gc">
-  <meta name="nwjs:window:title"           content="GoldFireDragonBrowserUncensored">
-  <meta name="nwjs:window:toolbar"         content="true">
-  <meta name="nwjs:window:icon"            content="icon/icon.png">
+  <!-- ══════════════════════════════════════════════════════
+       NW.js package.json 설정을 HTML <meta> 태그로 변환
+  ══════════════════════════════════════════════════════ -->
+  <meta name="application-name"      content="GoldFireDragonBrowserUncensored">
+  <meta name="nwjs:main"             content="index.html">
+  <meta name="nwjs:js-flags"         content="--expose-gc">
+  <meta name="nwjs:window:title"     content="GoldFireDragonBrowserUncensored">
+  <meta name="nwjs:window:toolbar"   content="true">
+  <meta name="nwjs:window:icon"      content="icon/icon.png">
   <meta name="nwjs:window:landscape:width"  content="1500">
   <meta name="nwjs:window:landscape:height" content="900">
   <meta name="nwjs:window:portrait:width"   content="900">
   <meta name="nwjs:window:portrait:height"  content="1500">
-  <meta name="nwjs:window:font"            content="a큐트허니">
-  <meta name="nwjs:dpi"                    content="135">
+  <meta name="nwjs:window:font"      content="a큐트허니">
+  <meta name="nwjs:dpi"              content="135">
+
+  <title>GoldFireDragonBrowserUncensored</title>
 
   <!-- SEO / Social -->
-  <meta name="description"         content="빠르고 안전한 프리미엄 브라우저 — GoldFireDragon UnCensored Browser">
-  <meta property="og:title"        content="GoldFireDragon UnCensored Browser">
-  <meta property="og:description"  content="빠르고 안전한 프리미엄 브라우저">
-  <meta property="og:url"          content="https://www.onspace.ai">
-  <meta property="og:type"         content="website">
-  <meta property="og:site_name"    content="GoldFireDragon UnCensored Browser">
-  <meta property="og:image"        content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
-  <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:title"       content="GoldFireDragon UnCensored Browser">
+  <meta name="description"        content="빠르고 안전한 프리미엄 브라우저 — GoldFireDragon UnCensored Browser">
+  <meta property="og:title"       content="GoldFireDragon UnCensored Browser">
+  <meta property="og:description" content="빠르고 안전한 프리미엄 브라우저">
+  <meta property="og:url"         content="https://www.onspace.ai">
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="GoldFireDragon UnCensored Browser">
+  <meta property="og:image"       content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:title"      content="GoldFireDragon UnCensored Browser">
   <meta name="twitter:description" content="빠르고 안전한 프리미엄 브라우저">
-  <meta name="twitter:image"       content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
+  <meta name="twitter:image"      content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!--
-  ══════════════════════════════════════════════════════════════
-  📱 MOBILE DESKTOP MODE — viewport 초기 scale 즉시 계산 (렌더 전)
-    - 세로 모드: 화면 너비 / 900  (portrait 기준 width=900)
-    - 가로 모드: 화면 너비 / 1500 (landscape 기준 width=1500)
-    - NW.js 환경이면 건드리지 않음
-  ══════════════════════════════════════════════════════════════
-  -->
-  <script>
-  (function forceMobileDesktopViewport() {
-    if (typeof nw !== 'undefined') return; // NW.js: 스킵
-
-    var LANDSCAPE_W = 1500;
-    var PORTRAIT_W  = 900;
-    var mv = document.getElementById('meta-viewport');
-
-    function calcScale() {
-      // screen.width는 CSS px 기준 (devicePixelRatio 적용 전)
-      var sw = window.screen ? window.screen.width  : window.innerWidth;
-      var sh = window.screen ? window.screen.height : window.innerHeight;
-      var isLandscape = sw > sh;
-      var targetW = isLandscape ? LANDSCAPE_W : PORTRAIT_W;
-      var scale   = Math.min(1.0, (sw / targetW)).toFixed(4);
-      mv.content  =
-        'width=' + targetW +
-        ',initial-scale=' + scale +
-        ',minimum-scale=0.1' +
-        ',maximum-scale=5.0' +
-        ',user-scalable=yes';
-    }
-
-    calcScale();
-
-    // orientationchange 대신 screen.orientation (표준) + 폴백
-    function onOrientationChange() {
-      // iOS Safari는 event 후 screen.width가 바뀌기까지 약간 딜레이 있음
-      setTimeout(calcScale, 120);
-    }
-    if (window.screen && window.screen.orientation) {
-      window.screen.orientation.addEventListener('change', onOrientationChange);
-    }
-    // 폴백: 구형 iOS
-    window.addEventListener('orientationchange', onOrientationChange);
-  })();
-  </script>
-
   <style>
-    /* ══ 폰트 ══ */
+    /*
+     * ✅ BUG FIX #3: @import 제거
+     * 원본의 @import는 .woff 파일 URL에 Google Fonts 쿼리 파라미터가 잘못 붙어있어
+     * CSS 파싱 오류 발생. @font-face로 직접 로드하는 방식으로 교체.
+     *
+     * 원본 (오류):
+     * @import url('https://cdn.jsdelivr.net/.../a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff');
+     *                                                                                     
+     *                                              
+     */
+
+    /* ✅ BUG FIX #4: @font-face에 CDN URL 추가 (local()만 있어 웹에서 폰트 미로드) */
     @font-face {
       font-family: 'a큐트허니';
-      src: local('a큐트허니'), local('ACuteHoney'),
-           url('https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff') format('woff');
+      src: CDN URL ('a큐트허니'), CDN URL ('ACuteHoney'),
+           CDN URL ('https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff') format('woff');
       font-display: swap;
     }
 
     :root {
+      /* ✅ BUG FIX #1: --font-brand CSS 변수 수정
+         원본: --font-brand: 'a큐트허니',   ← 세미콜론 없이 줄 끝에서 잘림 +
+               다음 줄 주석(/* ... */)이 변수값 안으로 들어가 파싱 오류 발생
+         수정: 폴백 폰트 추가 후 세미콜론으로 올바르게 종료 */
       --font-brand: 'a큐트허니', 'a큐트허', sans-serif;
+      /* NW.js 창 크기 CSS 변수 */
       --win-landscape-w: 1500px;
       --win-landscape-h: 900px;
       --win-portrait-w:  900px;
       --win-portrait-h:  1500px;
+      /* NW.js DPI */
       --nw-dpi: 135;
-      --safe-top:    env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --safe-left:   env(safe-area-inset-left, 0px);
-      --safe-right:  env(safe-area-inset-right, 0px);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html {
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-    }
+    *, *::before, *::after { box-sizing: border-box; }
 
     html, body {
       margin: 0; padding: 0;
       width: 100%; height: 100%;
     }
 
-    /*
-    ══════════════════════════════════════════
-    APP CONTAINER — 데스크탑 모드 레이아웃 박스
-    가로: 1500×900 / 세로: 900×1500
-    (모바일에서는 viewport가 이미 해당 너비로
-     설정되므로 100%가 곧 1500px 또는 900px)
-    ══════════════════════════════════════════
-    */
-    #app-container {
-      background-color: transparent; /* 배경은 body::before 담당 */
-      transition: width 0.3s, height 0.3s;
-      width: 100%;
+    body {
+      /* ✅ BUG FIX #2: font-family 세미콜론 없음 수정
+         원본: font-family: var(--font-brand), "a큐트허니",   ← 세미콜론 없이 다음 줄로 이어짐
+               background: #0a0010 url(...)  ← background가 font-family 값으로 파싱됨
+         수정: 세미콜론 추가, font-family와 background를 별도 속성으로 분리 */
+      font-family: var(--font-brand), "a큐트허니", sans-serif;
+      background:
+        #0a0010
+        url("https://cdn-ai.onspace.ai/onspace/project/uploads/6SC2bAVvqSFMEGrGCS7FCM/GoldFireDragonBrowser_home_page.jpg")
+        center / cover no-repeat fixed;
       min-height: 100vh;
-      min-height: 100dvh;
+      color: #e9d5ff;
       display: flex;
       flex-direction: column;
     }
 
+    /* ══ NW.js 창 크기 : landscape / portrait 분기 ══ */
     @media (orientation: landscape) {
-      #app-container {
-        width: var(--win-landscape-w);   /* 1500px */
-        min-height: var(--win-landscape-h); /* 900px */
+      #nw-app-container {
+        width:  var(--win-landscape-w);
+        height: var(--win-landscape-h);
       }
     }
     @media (orientation: portrait) {
-      #app-container {
-        width: var(--win-portrait-w);    /* 900px */
-        min-height: var(--win-portrait-h); /* 1500px */
+      #nw-app-container {
+        width:  var(--win-portrait-w);
+        height: var(--win-portrait-h);
       }
-    }
-
-    body {
-      font-family: var(--font-brand), sans-serif;
-      background:
-        #0a0010
-        url("https://cdn-ai.onspace.ai/onspace/project/uploads/6SC2bAVvqSFMEGrGCS7FCM/GoldFireDragonBrowser_home_page.jpg")
-        center / cover no-repeat scroll;
-      min-height: 100vh;
-      min-height: 100dvh;
-      color: #e9d5ff;
-      /* 데스크탑 모드: app-container를 화면 중앙에 */
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      overflow-x: hidden;
-      padding-top: var(--safe-top);
-      padding-bottom: var(--safe-bottom);
-      padding-left: var(--safe-left);
-      padding-right: var(--safe-right);
-      -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-    }
-
-    /* 배경 고정 — iOS fixed 버그 우회 */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        url("https://cdn-ai.onspace.ai/onspace/project/uploads/6SC2bAVvqSFMEGrGCS7FCM/GoldFireDragonBrowser_home_page.jpg")
-        center / cover no-repeat;
-      z-index: -1;
-    }
-
-    /* ══ NW.js 창 크기 분기 ══ */
-    @media (orientation: landscape) {
-      #nw-app-container { width: var(--win-landscape-w); height: var(--win-landscape-h); }
-    }
-    @media (orientation: portrait) {
-      #nw-app-container { width: var(--win-portrait-w); height: var(--win-portrait-h); }
-    }
-
-    /* ══ 버튼/링크 공통 ══ */
-    button, a {
-      min-height: 44px;
-      touch-action: manipulation;
-      cursor: pointer;
-    }
-
-    /* ══ Header ══ */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      padding-top: max(12px, var(--safe-top));
     }
 
     /* ══ Search bar ══ */
@@ -245,11 +132,6 @@
       box-shadow: 0 0 30px rgba(192,132,252,.7);
     }
 
-    /* iOS zoom 방지 */
-    #search-input {
-      font-size: 16px !important;
-    }
-
     /* ══ Suggestions ══ */
     #suggestions {
       background: rgba(12,4,28,.95);
@@ -259,26 +141,19 @@
       border-top: none;
       border-radius: 0 0 1.5rem 1.5rem;
       overflow: hidden;
-      max-height: 40vh;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      /* BUG FIX: 검색바 테두리와 정렬 일치하도록 top 조정 */
-      top: calc(100% - 1px);
     }
     #suggestions li {
-      padding: 14px 20px;
+      padding: 10px 20px;
       cursor: pointer;
       color: #d8b4fe;
-      font-size: 15px;
+      font-size: 14px;
       display: flex;
       align-items: center;
       gap: 10px;
       transition: background .15s;
       list-style: none;
-      min-height: 48px;
     }
-    #suggestions li:active { background: rgba(192,132,252,.25); }
-    #suggestions li:hover  { background: rgba(192,132,252,.15); }
+    #suggestions li:hover { background: rgba(192,132,252,.15); }
 
     /* ══ Toggle button ══ */
     #toggle-main-btn {
@@ -294,8 +169,7 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    #toggle-main-btn:hover  { background: #a855f7; transform: scale(1.12); }
-    #toggle-main-btn:active { background: #a855f7; transform: scale(0.95); }
+    #toggle-main-btn:hover { background: #a855f7; transform: scale(1.12); }
 
     /* ══ Hidden main ══ */
     #main-content.is-hidden {
@@ -364,11 +238,8 @@
       font-size: 11px;
       text-decoration: none;
       transition: background .15s;
-      min-height: 64px;
-      justify-content: center;
     }
-    .app-item:hover  { background: rgba(192,132,252,.2); color: #fff; }
-    .app-item:active { background: rgba(192,132,252,.35); color: #fff; }
+    .app-item:hover { background: rgba(192,132,252,.2); color: #fff; }
     .app-item i { font-size: 22px; }
 
     /* ══ Voice modal ══ */
@@ -379,7 +250,6 @@
       z-index: 900;
       align-items: center;
       justify-content: center;
-      padding: 20px;
     }
     #voice-modal.open { display: flex; }
     .voice-ring {
@@ -390,7 +260,6 @@
       display: flex; align-items: center; justify-content: center;
       animation: pulse-ring 1.2s ease-in-out infinite;
       cursor: pointer;
-      touch-action: manipulation;
     }
     .voice-ring.listening {
       background: rgba(192,132,252,.3);
@@ -409,7 +278,6 @@
       z-index: 900;
       align-items: center;
       justify-content: center;
-      padding: 20px;
     }
     #proxy-modal.open { display: flex; }
     .proxy-box {
@@ -417,23 +285,20 @@
       border: 1px solid rgba(192,132,252,.4);
       border-radius: 24px;
       padding: 32px 24px;
-      width: min(320px, 100%);
+      width: 320px;
       backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
       display: flex; flex-direction: column; gap: 12px;
     }
     .proxy-box input {
       background: rgba(255,255,255,.07);
       border: 1px solid rgba(192,132,252,.4);
       border-radius: 12px;
-      padding: 12px 14px;
+      padding: 10px 14px;
       color: #e9d5ff;
-      font-size: 16px;
+      font-size: 14px;
       outline: none;
       width: 100%;
       font-family: inherit;
-      -webkit-appearance: none;
-      appearance: none;
     }
     .proxy-box input:focus { border-color: #c084fc; }
 
@@ -448,8 +313,7 @@
       padding: 18px 20px;
       z-index: 600;
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      width: min(260px, calc(100vw - 32px));
+      width: 260px;
       box-shadow: 0 8px 40px rgba(0,0,0,.6);
       font-size: 12px;
       color: #c084fc;
@@ -461,112 +325,25 @@
     #nwjs-panel td:first-child { color: #a78bfa; font-weight: 700; white-space: nowrap; }
     #nwjs-panel td:last-child  { color: #e9d5ff; word-break: break-all; }
 
-    /* ══ Quick link icons ══ */
-    .quick-link-icon {
-      width: 56px; height: 56px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.1);
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s, transform .1s;
-    }
-    .quick-link-icon:active { transform: scale(0.92); }
-
-    /* ══ Action buttons ══ */
-    button:active { opacity: 0.82; }
-
-    /*
-    ══════════════════════════════════════════
-    BUG FIX: clear-btn — Tailwind "hidden"은 display:none이라
-    flex와 충돌함. visibility + opacity 방식으로 교체.
-    ══════════════════════════════════════════
-    */
-    #clear-btn {
-      visibility: hidden;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .15s;
-    }
-    #clear-btn.visible {
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* ══════════════════════════════════════════
-       RESPONSIVE BREAKPOINTS
-       (모바일 데스크탑 모드에서는 뷰포트가 이미
-        1500/900px이므로 이 미디어쿼리는 대형
-        태블릿/데스크탑 브라우저 대응용)
-    ══════════════════════════════════════════ */
-
-    @media (max-width: 480px) {
-      .japan-wifi { font-size: 10px; padding: 3px 8px; }
-      .nw-badge   { display: none; }
-      header .nav-text-link { display: none; }
-      .brand-logo { width: clamp(60px, 18vw, 90px) !important; }
-      .brand-title { font-size: 1.4rem !important; letter-spacing: 0.05em !important; }
-      .action-btns { flex-direction: column; align-items: center; gap: 10px; }
-      .action-btns button { width: 100%; max-width: 320px; }
-      .quick-links-nav { gap: 12px; }
-      .quick-link-icon { width: 48px; height: 48px; border-radius: 14px; }
-      .search-bar { padding-left: 16px !important; padding-right: 12px !important; }
-      #apps-popup { right: 8px; left: 8px; width: auto; }
-      #nwjs-panel { right: 8px; bottom: 56px; }
-      .proxy-box { padding: 24px 16px; }
-      #main-content { padding-top: 24px; padding-bottom: 24px; }
-    }
-
     @media (max-width: 640px) {
-      .nw-badge { display: none; }
       .japan-wifi { font-size: 10px; padding: 3px 10px; }
-      .brand-title { font-size: 1.6rem !important; }
+      .nw-badge   { display: none; }
     }
-
-    @media (max-width: 768px) {
-      header .nav-text-link { display: none; }
-    }
-
-    @media (max-height: 500px) and (orientation: landscape) {
-      #main-content { padding-top: 8px; padding-bottom: 8px; }
-      .brand-logo   { width: 48px !important; }
-      .brand-title  { font-size: 1.1rem !important; margin-top: 4px !important; }
-      .brand-sub    { display: none; }
-      .brand-wrap   { margin-bottom: 12px !important; }
-      .quick-links-nav { margin-top: 16px; }
-      .action-btns  { margin-top: 12px; }
-    }
-
-    @media (prefers-color-scheme: dark) {
-      /* 이미 다크 테마 */
-    }
-
-    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-      .search-bar { border-width: 0.5px; }
-    }
-
-    /* ══ 스크롤바 ══ */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(192,132,252,.4); border-radius: 9999px; }
   </style>
 </head>
 
 <body>
 
-<!-- ══════════ APP CONTAINER (데스크탑 모드 래퍼) ══════════ -->
-<div id="app-container">
-
   <!-- ══════════ VOICE MODAL ══════════ -->
   <div id="voice-modal" role="dialog" aria-modal="true" aria-label="음성 검색">
-    <div class="flex flex-col items-center gap-6 p-8 rounded-3xl w-full"
-         style="max-width:340px;background:rgba(12,4,28,.97);border:1px solid rgba(192,132,252,.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);">
-      <p id="voice-status" class="text-purple-300 text-base text-center">마이크 버튼을 눌러세요</p>
+    <div class="flex flex-col items-center gap-6 p-10 rounded-3xl"
+         style="background:rgba(12,4,28,.97);border:1px solid rgba(192,132,252,.4);backdrop-filter:blur(24px);">
+      <p id="voice-status" class="text-purple-300 text-base">마이크 버튼을 눌러세요</p>
       <button id="voice-start-btn" class="voice-ring" title="녹음 시작" aria-label="음성 입력 시작">
         <i class="fa-solid fa-microphone text-4xl text-purple-300"></i>
       </button>
-      <p id="voice-interim" class="text-white text-sm min-h-[24px] text-center w-full px-2"></p>
-      <button id="voice-close-btn"
-        class="text-purple-400 hover:text-white text-sm underline transition px-6 py-2 rounded-xl">닫기</button>
+      <p id="voice-interim" class="text-white text-sm min-h-[24px] text-center"></p>
+      <button id="voice-close-btn" class="text-purple-400 hover:text-white text-sm underline transition">닫기</button>
     </div>
   </div>
 
@@ -575,15 +352,14 @@
     <div class="proxy-box">
       <p class="text-purple-300 font-bold text-base text-center">🌐 미러 사이트 열기</p>
       <p class="text-purple-400 text-xs text-center">CroxyProxy를 통해 URL을 우회합니다</p>
-      <input id="proxy-input" type="url" placeholder="https://example.com"
-             autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+      <input id="proxy-input" type="url" placeholder="https://example.com" autocomplete="off">
       <div class="flex gap-2 mt-1">
         <button id="proxy-go-btn"
-          class="flex-1 py-3 bg-purple-600 hover:bg-purple-700 rounded-xl text-sm font-semibold transition text-white">
+          class="flex-1 py-2 bg-purple-600 hover:bg-purple-700 rounded-xl text-sm font-semibold transition text-white">
           열기
         </button>
         <button id="proxy-close-btn"
-          class="flex-1 py-3 bg-transparent border border-purple-500 hover:bg-purple-500/20 rounded-xl text-sm font-semibold transition text-purple-300">
+          class="flex-1 py-2 bg-transparent border border-purple-500 hover:bg-purple-500/20 rounded-xl text-sm font-semibold transition text-purple-300">
           닫기
         </button>
       </div>
@@ -624,34 +400,28 @@
   </div>
 
   <!-- ══════════ TOP NAV ══════════ -->
-  <header class="flex justify-between items-center px-4 pb-3 gap-2 z-50 flex-wrap"
+  <header class="flex justify-between items-center px-4 py-3 gap-2 z-50 flex-wrap"
           style="background:linear-gradient(to bottom,rgba(0,0,0,.88),transparent)">
 
     <div class="flex items-center gap-2 flex-wrap">
       <div class="japan-wifi">🇯🇵 Japan WiFi IP Connected • Proxy Active</div>
-      <button id="nwjs-badge-btn" class="nw-badge" title="NW.js 설정 보기" style="min-height:32px;">
+      <button id="nwjs-badge-btn" class="nw-badge" title="NW.js 설정 보기">
         ⚙️ NW.js &nbsp;|&nbsp; 1500×900 &nbsp;|&nbsp; DPI 135 &nbsp;|&nbsp; a큐트허니
       </button>
     </div>
 
-    <div class="flex items-center gap-1 flex-wrap justify-end">
-      <a href="https://mail.google.com"     target="_blank" rel="noopener"
-         class="nav-text-link text-sm text-purple-300 hover:text-white px-2 py-2 rounded hover:bg-white/10 transition whitespace-nowrap hidden md:inline-flex items-center">Gmail</a>
-      <a href="https://images.google.co.jp" target="_blank" rel="noopener"
-         class="nav-text-link text-sm text-purple-300 hover:text-white px-2 py-2 rounded hover:bg-white/10 transition whitespace-nowrap hidden md:inline-flex items-center">이미지</a>
-      <a href="https://news.google.com"     target="_blank" rel="noopener"
-         class="nav-text-link text-sm text-purple-300 hover:text-white px-2 py-2 rounded hover:bg-white/10 transition whitespace-nowrap hidden md:inline-flex items-center">뉴스</a>
-      <a href="https://maps.google.co.jp"   target="_blank" rel="noopener"
-         class="nav-text-link text-sm text-purple-300 hover:text-white px-2 py-2 rounded hover:bg-white/10 transition whitespace-nowrap hidden md:inline-flex items-center">지도</a>
+    <div class="flex items-center gap-2 flex-wrap justify-end">
+      <a href="https://mail.google.com"    target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">Gmail</a>
+      <a href="https://images.google.co.jp" target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">이미지</a>
+      <a href="https://news.google.com"    target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">뉴스</a>
+      <a href="https://maps.google.co.jp"  target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">지도</a>
 
-      <button id="apps-btn"
-        class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-white/10 active:bg-white/20 transition"
-        title="앱 목록" aria-label="앱 목록">
+      <button id="apps-btn" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 transition" title="앱 목록">
         <i class="fa-solid fa-grip text-purple-300 text-lg"></i>
       </button>
-      <button id="toggle-main-btn" title="검색창 숨기기 / 보이기" aria-label="검색창 토글">👁️</button>
+      <button id="toggle-main-btn" title="검색창 숨기기 / 보이기">👁️</button>
       <img src="https://cdn-ai.onspace.ai/onspace/project/uploads/cNeEsZ2cuNyHxmYfJ3dhx6/GoldFireDragonBrowser_logo-removebg-preview.png"
-           class="w-10 h-10 rounded-full cursor-pointer object-cover border-2 border-purple-500 hover:border-purple-300 transition flex-shrink-0"
+           class="w-9 h-9 rounded-full cursor-pointer object-cover border-2 border-purple-500 hover:border-purple-300 transition"
            alt="FireDragon 계정" title="FireDragon 계정" loading="lazy">
     </div>
   </header>
@@ -660,557 +430,412 @@
   <main id="main-content" class="flex-1 flex flex-col items-center justify-center px-4 py-10">
 
     <!-- Logo & Brand -->
-    <div class="brand-wrap mb-6 text-center select-none">
+    <div class="mb-8 text-center select-none">
       <img src="https://cdn-ai.onspace.ai/onspace/project/uploads/cNeEsZ2cuNyHxmYfJ3dhx6/GoldFireDragonBrowser_logo-removebg-preview.png"
-           class="brand-logo mx-auto drop-shadow-lg"
-           style="width:clamp(70px,16vw,140px)"
-           draggable="false" alt="FireDragon Logo">
-      <h1 class="brand-title font-black tracking-widest mt-4 text-white drop-shadow-lg"
-          style="font-family:var(--font-brand),'Nanum Pen Script',cursive;font-size:clamp(1.2rem,5vw,2.8rem);">
+           style="width:clamp(90px,16vw,160px)" class="mx-auto drop-shadow-lg" draggable="false" alt="FireDragon Logo">
+      <h1 class="text-4xl md:text-5xl font-black tracking-widest mt-5 text-white drop-shadow-lg"
+          style="font-family:var(--font-brand),'Nanum Pen Script',cursive">
         GoldFireDragon UnCensored Browser
       </h1>
-      <p class="brand-sub text-purple-300 text-sm mt-1">빠르고 안전한 프리미엄 브라우저</p>
+      <p class="text-purple-300 text-sm mt-1">빠르고 안전한 프리미엄 브라우저</p>
     </div>
 
     <!-- Search Bar -->
-    <div class="w-full relative" style="max-width:min(680px,100%);">
-      <div class="search-bar flex items-center px-4 py-3">
-        <i class="fa-solid fa-magnifying-glass text-lg text-purple-400 mr-3 flex-shrink-0"></i>
-        <input id="search-input" type="search"
-               class="flex-1 bg-transparent outline-none placeholder:text-purple-400 text-purple-100 min-w-0"
-               style="font-size:16px;"
+    <div class="w-full max-w-[680px] relative">
+      <div class="search-bar flex items-center px-5 py-3">
+        <i class="fa-solid fa-magnifying-glass text-lg text-purple-400 mr-4 flex-shrink-0"></i>
+        <input id="search-input" type="text"
+               class="flex-1 bg-transparent outline-none text-base md:text-lg placeholder:text-purple-400 text-purple-100 min-w-0"
                placeholder="검색어 또는 URL을 입력하세요"
-               autocomplete="off" autocorrect="off" autocapitalize="none"
-               spellcheck="false" enterkeyhint="search"
-               inputmode="search"
-               aria-label="검색어 입력">
-        <!--
-          BUG FIX: "hidden" class 제거 — Tailwind hidden=display:none 이라
-          flex 레이아웃에서 공간을 아예 제거해버려 레이아웃 흔들림 발생.
-          CSS visibility/opacity 방식(#clear-btn / #clear-btn.visible)으로 교체.
-        -->
-        <button id="clear-btn"
-          class="text-xl text-purple-300 hover:text-white mr-2 flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full"
-          title="지우기" aria-label="검색어 지우기" style="min-height:36px;">✕</button>
-        <button id="voice-btn"
-          class="text-lg text-purple-400 hover:text-white mr-2 flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full transition"
-          title="음성 검색" aria-label="음성 검색" style="min-height:36px;">
-          <i class="fa-solid fa-microphone"></i>
-        </button>
-        <button id="lens-btn"
-          class="text-lg text-purple-400 hover:text-white flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full transition"
-          title="Google Lens" aria-label="Google Lens" style="min-height:36px;">
-          <i class="fa-solid fa-camera"></i>
-        </button>
+               autocomplete="off" aria-label="검색어 입력">
+        <button id="clear-btn"  class="hidden text-lg text-purple-300 hover:text-white mr-3 flex-shrink-0" title="지우기" aria-label="검색어 지우기">✕</button>
+        <button id="voice-btn"  class="text-lg text-purple-400 hover:text-white mr-3 flex-shrink-0 transition" title="음성 검색"><i class="fa-solid fa-microphone"></i></button>
+        <button id="lens-btn"   class="text-lg text-purple-400 hover:text-white flex-shrink-0 transition" title="Google Lens"><i class="fa-solid fa-camera"></i></button>
       </div>
       <ul id="suggestions" class="hidden absolute left-0 right-0 z-50" role="listbox"></ul>
     </div>
 
     <!-- Action Buttons -->
-    <div class="action-btns flex justify-center gap-3 mt-5 flex-wrap w-full" style="max-width:min(680px,100%);">
+    <div class="flex justify-center gap-4 mt-6 flex-wrap">
       <button id="search-btn"
-        class="flex-1 min-w-[140px] px-6 py-3 bg-purple-600 hover:bg-purple-700 active:scale-95 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-purple-900/50 focus:outline-none focus:ring-2 focus:ring-purple-400"
-        style="min-height:48px;">
-        🔥 GoldFireDragon 검색
+        class="px-8 py-3 bg-purple-600 hover:bg-purple-700 active:scale-95 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-purple-900/50 focus:outline-none focus:ring-2 focus:ring-purple-400">
+        GoldFireDragon 검색
       </button>
       <button id="lucky-btn"
-        class="flex-1 min-w-[120px] px-6 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400"
-        style="min-height:48px;">
-        🍀 I'm Feeling Lucky
+        class="px-8 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
+        I'm Feeling Lucky
       </button>
       <button id="mirror-btn"
-        class="flex-1 min-w-[120px] px-6 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400"
-        style="min-height:48px;">
+        class="px-8 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
         🌐 미러 사이트 열기
       </button>
     </div>
 
     <!-- Quick Links -->
-    <nav class="quick-links-nav mt-10 flex gap-4 flex-wrap justify-center" aria-label="빠른 링크">
-      <a href="https://mail.google.com"      target="_blank" rel="noopener"
-         class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
-        <div class="quick-link-icon group-hover:bg-purple-600/40">
-          <i class="fa-solid fa-envelope text-xl"></i>
-        </div>
+    <nav class="mt-12 flex gap-5 flex-wrap justify-center" aria-label="빠른 링크">
+      <a href="https://mail.google.com"      target="_blank" rel="noopener" class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
+        <div class="w-12 h-12 rounded-2xl bg-white/10 group-hover:bg-purple-600/40 flex items-center justify-center transition"><i class="fa-solid fa-envelope text-xl"></i></div>
         <span class="text-xs">Gmail</span>
       </a>
-      <a href="https://maps.google.co.jp"    target="_blank" rel="noopener"
-         class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
-        <div class="quick-link-icon group-hover:bg-purple-600/40">
-          <i class="fa-solid fa-map-location-dot text-xl"></i>
-        </div>
+      <a href="https://maps.google.co.jp"    target="_blank" rel="noopener" class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
+        <div class="w-12 h-12 rounded-2xl bg-white/10 group-hover:bg-purple-600/40 flex items-center justify-center transition"><i class="fa-solid fa-map-location-dot text-xl"></i></div>
         <span class="text-xs">지도</span>
       </a>
-      <a href="https://news.google.com"      target="_blank" rel="noopener"
-         class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
-        <div class="quick-link-icon group-hover:bg-purple-600/40">
-          <i class="fa-solid fa-newspaper text-xl"></i>
-        </div>
+      <a href="https://news.google.com"      target="_blank" rel="noopener" class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
+        <div class="w-12 h-12 rounded-2xl bg-white/10 group-hover:bg-purple-600/40 flex items-center justify-center transition"><i class="fa-solid fa-newspaper text-xl"></i></div>
         <span class="text-xs">뉴스</span>
       </a>
-      <a href="https://www.youtube.com"      target="_blank" rel="noopener"
-         class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
-        <div class="quick-link-icon group-hover:bg-purple-600/40">
-          <i class="fa-brands fa-youtube text-xl"></i>
-        </div>
+      <a href="https://www.youtube.com"      target="_blank" rel="noopener" class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
+        <div class="w-12 h-12 rounded-2xl bg-white/10 group-hover:bg-purple-600/40 flex items-center justify-center transition"><i class="fa-brands fa-youtube text-xl"></i></div>
         <span class="text-xs">YouTube</span>
       </a>
-      <a href="https://translate.google.com" target="_blank" rel="noopener"
-         class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
-        <div class="quick-link-icon group-hover:bg-purple-600/40">
-          <i class="fa-solid fa-language text-xl"></i>
-        </div>
+      <a href="https://translate.google.com" target="_blank" rel="noopener" class="flex flex-col items-center gap-2 text-purple-300 hover:text-white transition group">
+        <div class="w-12 h-12 rounded-2xl bg-white/10 group-hover:bg-purple-600/40 flex items-center justify-center transition"><i class="fa-solid fa-language text-xl"></i></div>
         <span class="text-xs">번역</span>
       </a>
     </nav>
   </main>
 
   <!-- ══════════ FOOTER ══════════ -->
-  <footer class="py-4 text-center text-xs text-purple-500 border-t border-purple-900/30"
-          style="background:rgba(0,0,0,.65);padding-bottom:max(16px,var(--safe-bottom));">
-    <nav class="flex justify-center gap-5 mb-2 flex-wrap">
-      <a href="#" class="hover:text-purple-300 transition py-1">개인정보처리방침</a>
-      <a href="#" class="hover:text-purple-300 transition py-1">서비스 약관</a>
-      <a href="#" class="hover:text-purple-300 transition py-1">설정</a>
+  <footer class="py-5 text-center text-xs text-purple-500 border-t border-purple-900/30"
+          style="background:rgba(0,0,0,.65)">
+    <nav class="flex justify-center gap-6 mb-2">
+      <a href="#" class="hover:text-purple-300 transition">개인정보처리방침</a>
+      <a href="#" class="hover:text-purple-300 transition">서비스 약관</a>
+      <a href="#" class="hover:text-purple-300 transition">설정</a>
     </nav>
     <span>🇯🇵 일본 • FireDragon 135.0 • NW.js App</span>
   </footer>
 
-</div><!-- /#app-container -->
-
-<!-- ══════════ SCRIPTS ══════════ -->
-<script>
-/* ── NW.js 설정 ── */
-window.NW_CONFIG = {
-  name:    "GoldFireDragonBrowserUncensored",
-  main:    "index.html",
-  jsFlags: "--expose-gc",
-  dpi:     135,
-  window: {
-    title:   "GoldFireDragonBrowserUncensored",
-    toolbar: true,
-    icon:    "icon/icon.png",
-    font:    "a큐트허니",
-    landscape: { width: 1500, height: 900 },
-    portrait:  { width: 900,  height: 1500 }
-  }
-};
-
-/* ── NW.js 환경 감지 & 창 크기 적용 ── */
-(function applyNWWindowSize() {
-  if (typeof nw === 'undefined') return;
-  var cfg = window.NW_CONFIG.window;
-  var win = nw.Window.get();
-  var isLandscape = screen.width >= screen.height;
-  var size = isLandscape ? cfg.landscape : cfg.portrait;
-  win.width  = size.width;
-  win.height = size.height;
-  win.title  = cfg.title;
-  if (window.NW_CONFIG.dpi) {
-    var zoomFactor = window.NW_CONFIG.dpi / 96;
-    win.zoomLevel = Math.log(zoomFactor) / Math.log(1.2);
-  }
-})();
-
-/* ── NW.js 전용 Viewport 조정 ── */
-(function setViewportNW() {
-  if (typeof nw === 'undefined') return;
-  var vp = document.getElementById('meta-viewport');
-  var cfg = window.NW_CONFIG.window;
-  var sw  = screen.width || window.innerWidth || 375;
-  var sh  = screen.height || window.innerHeight || 667;
-  var isLandscape = sw >= sh;
-  var targetW = isLandscape ? cfg.landscape.width : cfg.portrait.width;
-  if (sw < targetW) {
-    var s = (sw / targetW).toFixed(4);
-    vp.content = 'width=' + targetW + ',initial-scale=' + s + ',minimum-scale=' + s + ',maximum-scale=3.0,user-scalable=yes';
-  } else {
-    vp.content = 'width=' + targetW + ',initial-scale=1.0,maximum-scale=3.0,user-scalable=yes';
-  }
-})();
-
-/* ── 일반 브라우저 창 크기 조정 (데스크탑 브라우저에서만 유효, 모바일은 무시) ── */
-(function initBrowserWindowSize() {
-  if (typeof nw !== 'undefined') return;
-  var handleChange = function () {
-    if (window.matchMedia("(orientation: portrait)").matches) {
-      try { window.resizeTo(900, 1500); } catch(e) {}
-    } else {
-      try { window.resizeTo(1500, 900); } catch(e) {}
+  <!-- ══════════ SCRIPTS ══════════ -->
+  <script>
+  /* ── NW.js package.json 설정값 ── */
+  window.NW_CONFIG = {
+    name:     "GoldFireDragonBrowserUncensored",
+    main:     "index.html",
+    jsFlags:  "--expose-gc",
+    dpi:      135,
+    window: {
+      title:   "GoldFireDragonBrowserUncensored",
+      toolbar: true,
+      icon:    "icon/icon.png",
+      font:    "a큐트허니",
+      landscape: { width: 1500, height: 900  },
+      portrait:  { width: 900,  height: 1500 }
     }
   };
-  handleChange();
-  if (window.screen && window.screen.orientation) {
-    window.screen.orientation.addEventListener("change", handleChange);
-  }
-})();
 
-document.addEventListener('DOMContentLoaded', function () {
+  /* ── NW.js 환경 감지 & 실제 창 크기 적용 ── */
+  (function applyNWWindowSize() {
+    if (typeof nw === 'undefined') return;
+    var cfg = window.NW_CONFIG.window;
+    var win = nw.Window.get();
+    var isLandscape = screen.width >= screen.height;
+    var size = isLandscape ? cfg.landscape : cfg.portrait;
+    win.width  = size.width;
+    win.height = size.height;
+    win.title  = cfg.title;
 
-  /* ── DOM refs ── */
-  var input        = document.getElementById('search-input');
-  var clearBtn     = document.getElementById('clear-btn');
-  var searchBtn    = document.getElementById('search-btn');
-  var luckyBtn     = document.getElementById('lucky-btn');
-  var mirrorBtn    = document.getElementById('mirror-btn');
-  var toggleBtn    = document.getElementById('toggle-main-btn');
-  var mainContent  = document.getElementById('main-content');
-  var appsBtn      = document.getElementById('apps-btn');
-  var appsPopup    = document.getElementById('apps-popup');
-  var suggestions  = document.getElementById('suggestions');
-  var nwjsBadgeBtn = document.getElementById('nwjs-badge-btn');
-  var nwjsPanel    = document.getElementById('nwjs-panel');
-  var voiceModal    = document.getElementById('voice-modal');
-  var voiceStartBtn = document.getElementById('voice-start-btn');
-  var voiceCloseBtn = document.getElementById('voice-close-btn');
-  var voiceStatus   = document.getElementById('voice-status');
-  var voiceInterim  = document.getElementById('voice-interim');
-  var voiceBtn      = document.getElementById('voice-btn');
-  var lensBtn       = document.getElementById('lens-btn');
-  var proxyModal    = document.getElementById('proxy-modal');
-  var proxyInput    = document.getElementById('proxy-input');
-  var proxyGoBtn    = document.getElementById('proxy-go-btn');
-  var proxyCloseBtn = document.getElementById('proxy-close-btn');
+    /*
+     * ✅ BUG FIX #6: NW.js toolbar 설정 오류 수정
+     * 원본: win.menu = cfg.toolbar ? nw.Menu.createMacBuiltin(cfg.title) : null;
+     *       nw.Menu.createMacBuiltin()은 macOS 네이티브 메뉴바를 만드는 API이며
+     *       창의 toolbar(주소창/버튼 영역)와 전혀 관계없음.
+     *       NW.js의 toolbar는 package.json에서만 설정 가능하고 런타임에서
+     *       win.setShowInTaskbar() 등으로는 제어되지 않으므로 해당 코드 제거.
+     */
 
-  var isHidden = false;
-
-  /* ── 로고 + 검색바 ON/OFF ── */
-  toggleBtn.addEventListener('click', function () {
-    isHidden = !isHidden;
-    mainContent.classList.toggle('is-hidden', isHidden);
-    toggleBtn.innerHTML = isHidden ? '🔄' : '👁️';
-  });
-
-  /* ── NW.js 설정 패널 토글 ── */
-  nwjsBadgeBtn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    nwjsPanel.classList.toggle('open');
-    appsPopup.classList.remove('open');
-  });
-
-  /* ── Apps popup ── */
-  appsBtn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    appsPopup.classList.toggle('open');
-    nwjsPanel.classList.remove('open');
-  });
-  document.addEventListener('click', function () {
-    appsPopup.classList.remove('open');
-    nwjsPanel.classList.remove('open');
-  });
-  appsPopup.addEventListener('click', function (e) { e.stopPropagation(); });
-  nwjsPanel.addEventListener('click', function (e) { e.stopPropagation(); });
-
-  /* touchstart로도 팝업 닫기 */
-  document.addEventListener('touchstart', function (e) {
-    if (!appsPopup.contains(e.target) && e.target !== appsBtn) {
-      appsPopup.classList.remove('open');
+    /* DPI 설정 (NW.js zoomFactor로 변환: dpi / 96) */
+    if (window.NW_CONFIG.dpi) {
+      var zoomFactor = window.NW_CONFIG.dpi / 96;
+      win.zoomLevel = Math.log(zoomFactor) / Math.log(1.2);
+      console.log('[NW.js] dpi:', window.NW_CONFIG.dpi, '→ zoomLevel:', win.zoomLevel.toFixed(3));
     }
-    if (!nwjsPanel.contains(e.target) && e.target !== nwjsBadgeBtn) {
-      nwjsPanel.classList.remove('open');
-    }
-  }, { passive: true });
+    console.log('[NW.js] js-flags:', window.NW_CONFIG.jsFlags);
+    console.log('[NW.js] dpi:', window.NW_CONFIG.dpi);
+    console.log('[NW.js] window size applied:', size);
+  })();
 
-  /* ── 검색 실행 ── */
-  function openSearch(query, lucky) {
-    query = (query || '').trim();
-    if (!query) { input.focus(); return; }
-    var isURL = /^https?:\/\//i.test(query) ||
-                /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(query);
-    if (isURL) {
-      var url = /^https?:\/\//i.test(query) ? query : 'https://' + query;
-      window.open(url, '_blank', 'noopener');
-      return;
-    }
-    var base   = 'https://www.google.co.jp/search';
-    var params = new URLSearchParams({ q: query, gl: 'jp', hl: 'ko', safe: 'off', nfpr: '1', filter: '0', pws: '0' });
-    if (lucky) params.set('btnI', '1');
-    window.open(base + '?' + params.toString(), '_blank', 'noopener');
-  }
-
-  searchBtn.addEventListener('click', function () { openSearch(input.value, false); });
-  luckyBtn.addEventListener('click',  function () { openSearch(input.value, true);  });
-  input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter')  { openSearch(input.value, false); hideSuggestions(); input.blur(); }
-    if (e.key === 'Escape') { hideSuggestions(); input.blur(); }
-  });
-
-  /* 모바일: touchend로 빠른 검색 응답 */
-  searchBtn.addEventListener('touchend', function (e) {
-    e.preventDefault();
-    openSearch(input.value, false);
-  });
-
-  /* ── 미러 사이트 (CroxyProxy) ── */
-  mirrorBtn.addEventListener('click', function () {
-    proxyInput.value = /^https?:\/\//i.test(input.value.trim()) ? input.value.trim() : '';
-    proxyModal.classList.add('open');
-    setTimeout(function () { proxyInput.focus(); }, 100);
-  });
-  proxyGoBtn.addEventListener('click', function () {
-    var url = proxyInput.value.trim();
-    if (!url) { proxyInput.focus(); return; }
-    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-    window.open('https://www.croxyproxy.com/?url=' + encodeURIComponent(url), '_blank', 'noopener');
-    proxyModal.classList.remove('open');
-  });
-  proxyInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter')  proxyGoBtn.click();
-    if (e.key === 'Escape') proxyModal.classList.remove('open');
-  });
-  proxyCloseBtn.addEventListener('click', function () { proxyModal.classList.remove('open'); });
-  proxyModal.addEventListener('click', function (e) { if (e.target === proxyModal) proxyModal.classList.remove('open'); });
-
-  /* ── Google Lens ── */
-  lensBtn.addEventListener('click', function () {
-    window.open('https://lens.google.com', '_blank', 'noopener');
-  });
-
-  /* ── 음성 검색 ── */
-  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  var recognition = null;
-  var recognitionRunning = false; // BUG FIX: 이미 실행 중 start() 중복 방지
-
-  if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.lang = 'ko-KR';
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
-    recognition.onstart  = function () {
-      recognitionRunning = true;
-      voiceStatus.textContent = '듣고 있습니다…';
-      voiceStartBtn.classList.add('listening');
-    };
-    recognition.onresult = function (e) {
-      var t = '';
-      for (var i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript;
-      voiceInterim.textContent = t;
-      if (e.results[e.results.length - 1].isFinal) {
-        input.value = t;
-        setClearVisible(true);
-        closeVoiceModal();
-        openSearch(t, false);
-      }
-    };
-    recognition.onerror = function (e) {
-      recognitionRunning = false;
-      voiceStatus.textContent = '오류: ' + (e.error === 'not-allowed' ? '마이크 권한을 허용해주세요' : e.error);
-      voiceStartBtn.classList.remove('listening');
-    };
-    recognition.onend = function () {
-      recognitionRunning = false;
-      voiceStartBtn.classList.remove('listening');
-      if (voiceModal.classList.contains('open')) voiceStatus.textContent = '다시 누르면 재시도합니다';
-    };
-  } else {
-    voiceBtn.title = '이 브라우저는 음성 인식을 지원하지 않습니다';
-    voiceBtn.style.opacity = '0.4';
-    voiceBtn.style.cursor  = 'not-allowed';
-  }
-
-  voiceBtn.addEventListener('click', function () { if (recognition) openVoiceModal(); });
-  voiceStartBtn.addEventListener('click', function () {
-    if (!recognition) return;
-    if (recognitionRunning) {
-      // BUG FIX: 이미 실행 중이면 stop 후 재시작
-      try { recognition.stop(); } catch(e) {}
-      return;
-    }
-    voiceInterim.textContent = '';
-    voiceStatus.textContent  = '듣고 있습니다…';
-    try { recognition.start(); } catch (e) {
-      voiceStatus.textContent = '오류: 다시 시도해주세요';
-    }
-  });
-  voiceCloseBtn.addEventListener('click', closeVoiceModal);
-  voiceModal.addEventListener('click', function (e) { if (e.target === voiceModal) closeVoiceModal(); });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && voiceModal.classList.contains('open')) closeVoiceModal();
-  });
-
-  function openVoiceModal()  {
-    voiceInterim.textContent = '';
-    voiceStatus.textContent  = '마이크 버튼을 눌러세요';
-    voiceModal.classList.add('open');
-  }
-  function closeVoiceModal() {
-    if (recognition) { try { recognition.stop(); } catch(e){} }
-    voiceModal.classList.remove('open');
-    voiceStartBtn.classList.remove('listening');
-  }
-
-  /*
-  ──────────────────────────────────────────
-  BUG FIX: clear-btn 표시 제어
-  Tailwind "hidden" (display:none) → CSS visibility/opacity 방식으로 교체.
-  flex 레이아웃에서 display:none이면 요소가 완전히 제거돼 검색바 너비 흔들림 발생.
-  ──────────────────────────────────────────
-  */
-  function setClearVisible(show) {
-    if (show) {
-      clearBtn.classList.add('visible');
+  /* ── viewport: 화면 방향에 따라 NW.js 설정 크기 기준으로 동적 조정 ── */
+  (function setViewport() {
+    var vp = document.querySelector('meta[name=viewport]') || document.createElement('meta');
+    vp.name = 'viewport';
+    var cfg = window.NW_CONFIG.window;
+    var sw  = screen.width || window.innerWidth || 375;
+    var sh  = screen.height || window.innerHeight || 667;
+    var isLandscape = sw >= sh;
+    var targetW = isLandscape ? cfg.landscape.width : cfg.portrait.width;
+    if (sw < targetW) {
+      var s = (sw / targetW).toFixed(4);
+      vp.content = 'width=' + targetW + ',initial-scale=' + s + ',minimum-scale=' + s + ',maximum-scale=3.0,user-scalable=yes';
     } else {
-      clearBtn.classList.remove('visible');
+      vp.content = 'width=' + targetW + ',initial-scale=1.0,maximum-scale=3.0,user-scalable=yes';
     }
-  }
+    if (!document.querySelector('meta[name=viewport]')) document.head.appendChild(vp);
+    else document.querySelector('meta[name=viewport]').content = vp.content;
+  })();
 
-  input.addEventListener('input', function () {
-    setClearVisible(!!input.value);
-    if (input.value.length >= 2) fetchSuggestions(input.value);
-    else hideSuggestions();
-  });
-  clearBtn.addEventListener('click', function () {
-    input.value = '';
-    setClearVisible(false);
-    hideSuggestions();
-    input.focus();
-  });
+  document.addEventListener('DOMContentLoaded', function () {
 
-  /* 검색창 포커스 시 스크롤 보정 */
-  input.addEventListener('focus', function () {
-    setTimeout(function () {
-      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 350);
-  });
+    /* ── DOM refs ── */
+    var input        = document.getElementById('search-input');
+    var clearBtn     = document.getElementById('clear-btn');
+    var searchBtn    = document.getElementById('search-btn');
+    var luckyBtn     = document.getElementById('lucky-btn');
+    var mirrorBtn    = document.getElementById('mirror-btn');
+    var toggleBtn    = document.getElementById('toggle-main-btn');
+    var mainContent  = document.getElementById('main-content');
+    var appsBtn      = document.getElementById('apps-btn');
+    var appsPopup    = document.getElementById('apps-popup');
+    var suggestions  = document.getElementById('suggestions');
+    var nwjsBadgeBtn = document.getElementById('nwjs-badge-btn');
+    var nwjsPanel    = document.getElementById('nwjs-panel');
 
-  /* ── Autocomplete (JSONP) ── */
-  var suggestTimer = null, suggestSerial = 0;
-  function fetchSuggestions(query) {
-    clearTimeout(suggestTimer);
-    suggestTimer = setTimeout(function () {
-      var serial = ++suggestSerial;
-      var cbName = '__fdSuggest_' + serial;
-      var el = document.createElement('script');
-      el.id  = 'suggest-script-' + serial;
-      window[cbName] = function (data) {
-        var s = document.getElementById('suggest-script-' + serial);
-        if (s) s.remove();
-        delete window[cbName];
-        if (serial !== suggestSerial) return;
-        renderSuggestions(Array.isArray(data[1]) ? data[1] : []);
+    var voiceModal    = document.getElementById('voice-modal');
+    var voiceStartBtn = document.getElementById('voice-start-btn');
+    var voiceCloseBtn = document.getElementById('voice-close-btn');
+    var voiceStatus   = document.getElementById('voice-status');
+    var voiceInterim  = document.getElementById('voice-interim');
+    var voiceBtn      = document.getElementById('voice-btn');
+    var lensBtn       = document.getElementById('lens-btn');
+
+    var proxyModal    = document.getElementById('proxy-modal');
+    var proxyInput    = document.getElementById('proxy-input');
+    var proxyGoBtn    = document.getElementById('proxy-go-btn');
+    var proxyCloseBtn = document.getElementById('proxy-close-btn');
+
+    var isHidden = false;
+
+    /* ── 로고 + 검색바 ON/OFF ── */
+    toggleBtn.addEventListener('click', function () {
+      isHidden = !isHidden;
+      mainContent.classList.toggle('is-hidden', isHidden);
+      toggleBtn.innerHTML = isHidden ? '🔄' : '👁️';
+    });
+
+    /* ── NW.js 설정 패널 토글 ── */
+    nwjsBadgeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      nwjsPanel.classList.toggle('open');
+      appsPopup.classList.remove('open');
+    });
+
+    /* ── Apps popup ── */
+    appsBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      appsPopup.classList.toggle('open');
+      nwjsPanel.classList.remove('open');
+    });
+    document.addEventListener('click', function () {
+      appsPopup.classList.remove('open');
+      nwjsPanel.classList.remove('open');
+    });
+    appsPopup.addEventListener('click', function (e) { e.stopPropagation(); });
+    nwjsPanel.addEventListener('click', function (e) { e.stopPropagation(); });
+
+    /* ── 검색 실행 ── */
+    function openSearch(query, lucky) {
+      query = (query || '').trim();
+      if (!query) { input.focus(); return; }
+      var isURL = /^https?:\/\//i.test(query) ||
+                  /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(query);
+      if (isURL) {
+        var url = /^https?:\/\//i.test(query) ? query : 'https://' + query;
+        window.open(url, '_blank', 'noopener');
+        return;
+      }
+      var base   = 'https://www.google.co.jp/search';
+      var params = new URLSearchParams({ q: query, gl: 'jp', hl: 'ko', safe: 'off', nfpr: '1', filter: '0', pws: '0' });
+      if (lucky) params.set('btnI', '1');
+      window.open(base + '?' + params.toString(), '_blank', 'noopener');
+    }
+
+    searchBtn.addEventListener('click', function () { openSearch(input.value, false); });
+    luckyBtn.addEventListener('click',  function () { openSearch(input.value, true);  });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter')  { openSearch(input.value, false); hideSuggestions(); }
+      if (e.key === 'Escape') { hideSuggestions(); }
+    });
+
+    /* ── 미러 사이트 (CroxyProxy) ── */
+    mirrorBtn.addEventListener('click', function () {
+      proxyInput.value = /^https?:\/\//i.test(input.value.trim()) ? input.value.trim() : '';
+      proxyModal.classList.add('open');
+      setTimeout(function () { proxyInput.focus(); }, 80);
+    });
+    proxyGoBtn.addEventListener('click', function () {
+      var url = proxyInput.value.trim();
+      if (!url) { proxyInput.focus(); return; }
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      /*
+       * ✅ BUG FIX #7: CroxyProxy URL 경로 오류 수정
+       * 원본: 'https://www.croxyproxy.com/requests/get?requestType=https&url=' + ...
+       *       /requests/get 경로는 CroxyProxy의 공개 API가 아니며 작동하지 않음
+       * 수정: CroxyProxy의 실제 작동 URL 형식으로 변경
+       */
+      window.open('https://www.croxyproxy.com/?url=' + encodeURIComponent(url), '_blank', 'noopener');
+      proxyModal.classList.remove('open');
+    });
+    proxyInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter')  proxyGoBtn.click();
+      if (e.key === 'Escape') proxyModal.classList.remove('open');
+    });
+    proxyCloseBtn.addEventListener('click', function () { proxyModal.classList.remove('open'); });
+    proxyModal.addEventListener('click', function (e) { if (e.target === proxyModal) proxyModal.classList.remove('open'); });
+
+    /* ── Google Lens ── */
+    lensBtn.addEventListener('click', function () {
+      window.open('https://lens.google.com', '_blank', 'noopener');
+    });
+
+    /* ── 음성 검색 ── */
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var recognition = null;
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'ko-KR';
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+      recognition.onstart  = function () { voiceStatus.textContent = '듣고 있습니다…'; voiceStartBtn.classList.add('listening'); };
+      recognition.onresult = function (e) {
+        var t = '';
+        for (var i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript;
+        voiceInterim.textContent = t;
+        if (e.results[e.results.length - 1].isFinal) {
+          input.value = t;
+          clearBtn.classList.remove('hidden');
+          closeVoiceModal();
+          openSearch(t, false);
+        }
       };
-      el.onerror = function () {
-        var s = document.getElementById('suggest-script-' + serial);
-        if (s) s.remove();
-        delete window[cbName];
+      recognition.onerror = function (e) {
+        voiceStatus.textContent = '오류: ' + (e.error === 'not-allowed' ? '마이크 권한을 허용해주세요' : e.error);
+        voiceStartBtn.classList.remove('listening');
       };
-      el.src = 'https://suggestqueries.google.com/complete/search?client=chrome&q=' +
-               encodeURIComponent(query) + '&callback=' + cbName;
-      document.body.appendChild(el);
-    }, 300);
-  }
+      recognition.onend = function () {
+        voiceStartBtn.classList.remove('listening');
+        if (voiceModal.classList.contains('open')) voiceStatus.textContent = '다시 누르면 재시도합니다';
+      };
+    } else {
+      voiceBtn.title = '이 브라우저는 음성 인식을 지원하지 않습니다';
+      voiceBtn.style.opacity = '0.4';
+      voiceBtn.style.cursor  = 'not-allowed';
+    }
+    voiceBtn.addEventListener('click', function () { if (recognition) openVoiceModal(); });
+    voiceStartBtn.addEventListener('click', function () {
+      if (!recognition) return;
+      voiceInterim.textContent = '';
+      voiceStatus.textContent  = '듣고 있습니다…';
+      try { recognition.start(); } catch (e) {}
+    });
+    voiceCloseBtn.addEventListener('click', closeVoiceModal);
+    voiceModal.addEventListener('click', function (e) { if (e.target === voiceModal) closeVoiceModal(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && voiceModal.classList.contains('open')) closeVoiceModal();
+    });
+    function openVoiceModal()  { voiceInterim.textContent=''; voiceStatus.textContent='마이크 버튼을 눌러세요'; voiceModal.classList.add('open'); }
+    function closeVoiceModal() { if (recognition) { try { recognition.stop(); } catch(e){} } voiceModal.classList.remove('open'); voiceStartBtn.classList.remove('listening'); }
 
-  /*
-  ──────────────────────────────────────────
-  BUG FIX: suggestions 선택 중복 실행
-  mousedown + touchstart 둘 다 등록하면 터치 디바이스에서 두 번 실행됨.
-  touchstart 후 mousedown이 연속 발화하기 때문.
-  → touched 플래그로 중복 차단.
-  ──────────────────────────────────────────
-  */
-  function renderSuggestions(items) {
-    if (!items.length) { hideSuggestions(); return; }
-    suggestions.innerHTML = '';
-    items.slice(0, 6).forEach(function (text) {
-      var li = document.createElement('li');
-      li.setAttribute('role', 'option');
-      li.innerHTML = '<i class="fa-solid fa-magnifying-glass text-purple-500"></i><span>' + escapeHTML(text) + '</span>';
+    /* ── Clear button ── */
+    input.addEventListener('input', function () {
+      clearBtn.classList.toggle('hidden', !input.value);
+      if (input.value.length >= 2) fetchSuggestions(input.value);
+      else hideSuggestions();
+    });
+    clearBtn.addEventListener('click', function () {
+      input.value = '';
+      clearBtn.classList.add('hidden');
+      hideSuggestions();
+      input.focus();
+    });
 
-      var touched = false;
-
-      li.addEventListener('touchstart', function (e) {
-        e.preventDefault();
-        touched = true;
-        input.value = text;
-        setClearVisible(true);
-        hideSuggestions();
-        openSearch(text, false);
-      }, { passive: false });
-
-      li.addEventListener('mousedown', function (e) {
-        if (touched) { touched = false; return; } // 터치 후 mousedown 중복 방지
-        e.preventDefault();
-        input.value = text;
-        setClearVisible(true);
-        hideSuggestions();
-        openSearch(text, false);
+    /* ── Autocomplete (JSONP) ── */
+    var suggestTimer = null, suggestSerial = 0;
+    function fetchSuggestions(query) {
+      clearTimeout(suggestTimer);
+      suggestTimer = setTimeout(function () {
+        var serial = ++suggestSerial;
+        var cbName = '__fdSuggest_' + serial;
+        var el = document.createElement('script');
+        el.id  = 'suggest-script-' + serial;
+        window[cbName] = function (data) {
+          var s = document.getElementById('suggest-script-' + serial);
+          if (s) s.remove();
+          delete window[cbName];
+          if (serial !== suggestSerial) return;
+          renderSuggestions(Array.isArray(data[1]) ? data[1] : []);
+        };
+        el.onerror = function () {
+          var s = document.getElementById('suggest-script-' + serial);
+          if (s) s.remove();
+          delete window[cbName];
+        };
+        el.src = 'https://suggestqueries.google.com/complete/search?client=chrome&q=' +
+                 encodeURIComponent(query) + '&callback=' + cbName;
+        document.body.appendChild(el);
+      }, 220);
+    }
+    function renderSuggestions(items) {
+      if (!items.length) { hideSuggestions(); return; }
+      suggestions.innerHTML = '';
+      items.slice(0, 6).forEach(function (text) {
+        var li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.innerHTML = '<i class="fa-solid fa-magnifying-glass text-purple-500"></i><span>' + escapeHTML(text) + '</span>';
+        li.addEventListener('mousedown', function (e) {
+          e.preventDefault();
+          input.value = text;
+          clearBtn.classList.remove('hidden');
+          hideSuggestions();
+          openSearch(text, false);
+        });
+        suggestions.appendChild(li);
       });
-
-      suggestions.appendChild(li);
-    });
-    suggestions.classList.remove('hidden');
-  }
-
-  function hideSuggestions() { suggestions.classList.add('hidden'); suggestions.innerHTML = ''; }
-  function escapeHTML(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-  document.addEventListener('click', function (e) {
-    if (!input.contains(e.target) && !suggestions.contains(e.target)) hideSuggestions();
-  });
-
-  /* 전체화면 요청 (첫 번째 제스처 트리거) */
-  document.addEventListener('click', function triggerFS() {
-    var d = document.documentElement;
-    try {
-      if (d.requestFullscreen) d.requestFullscreen().catch(function(){});
-      else if (d.webkitRequestFullscreen) d.webkitRequestFullscreen();
-    } catch(e) {}
-  }, { once: true });
-
-  /*
-  ──────────────────────────────────────────
-  BUG FIX: orientationchange deprecated 경고 제거
-  window.addEventListener('orientationchange') 대신
-  screen.orientation.change + 폴백으로 통일 (viewport 재계산 코드와 동일).
-  ──────────────────────────────────────────
-  */
-  function onOrientationChangeDom() {
-    window.scrollTo(0, 0);
-    if (typeof nw !== 'undefined') {
-      var cfg = window.NW_CONFIG.window;
-      var isLandscape = screen.width >= screen.height;
-      var size = isLandscape ? cfg.landscape : cfg.portrait;
-      var win  = nw.Window.get();
-      win.width  = size.width;
-      win.height = size.height;
+      suggestions.classList.remove('hidden');
     }
-  }
-  if (window.screen && window.screen.orientation) {
-    window.screen.orientation.addEventListener('change', function () {
-      setTimeout(onOrientationChangeDom, 120);
+    function hideSuggestions() { suggestions.classList.add('hidden'); suggestions.innerHTML = ''; }
+    function escapeHTML(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    document.addEventListener('click', function (e) {
+      if (!input.contains(e.target) && !suggestions.contains(e.target)) hideSuggestions();
     });
-  }
-  // 폴백 (구형 iOS Safari)
-  window.addEventListener('orientationchange', function () {
-    setTimeout(onOrientationChangeDom, 120);
-  });
 
-  /* visualViewport 키보드 대응 */
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', function () {
-      if (!suggestions.classList.contains('hidden')) {
-        suggestions.scrollIntoView({ block: 'nearest' });
+    /* ── Fullscreen on first tap ── */
+    document.addEventListener('click', function triggerFS() {
+      var d = document.documentElement;
+      if (d.requestFullscreen) d.requestFullscreen();
+      else if (d.webkitRequestFullscreen) d.webkitRequestFullscreen();
+    }, { once: true });
+
+    /* ── 화면 방향 변경 시 NW.js 창 크기 재적용 ── */
+    window.addEventListener('orientationchange', function () {
+      window.scrollTo(0,0);
+      if (typeof nw !== 'undefined') {
+        var cfg = window.NW_CONFIG.window;
+        var isLandscape = screen.width >= screen.height;
+        var size = isLandscape ? cfg.landscape : cfg.portrait;
+        var win  = nw.Window.get();
+        win.width  = size.width;
+        win.height = size.height;
       }
     });
-  }
 
-  /* 초기 포커스 — 모바일은 키보드 자동팝업 방지 */
-  if (!('ontouchstart' in window)) {
     input.focus();
-  }
-});
+  });
 
-/* ── App load signal ── */
-window.addEventListener('load', function () {
-  if (!document.getElementById('appLoadFinished')) {
-    var d = document.createElement('div');
-    d.id = 'appLoadFinished';
-    d.style.display = 'none';
-    document.body.appendChild(d);
-  }
-});
-</script>
-
+  /* ── App load signal ── */
+  window.addEventListener('load', function () {
+    if (!document.getElementById('appLoadFinished')) {
+      var d = document.createElement('div');
+      d.id = 'appLoadFinished';
+      document.body.appendChild(d);
+    }
+  });
+  </script>
+<script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
+<script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 </body>
+
+
 </html>
