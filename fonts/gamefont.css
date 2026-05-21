@@ -1,7 +1,7 @@
 @font-face {
     font-family: GameFont;
     src: url("a큐티허니.ttf");
-    src: url("a큐티허니.woff");
+    src: url("https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@blob/31b8dd572c0387ceafca5e607852465f462364ab/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff");
 }
 
 .IIV::-webkit-media-controls-play-button,
