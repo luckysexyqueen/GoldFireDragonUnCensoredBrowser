@@ -1,32 +1,84 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
+<!DOCTYPE html><html lang="ko"><head>
   <meta charset="UTF-8">
-  <meta name="geo.region" content="JP">
-  <meta name="geo.country" content="JP">
-  <meta name="geo.placename" content="Tokyo">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
-  <meta name="HandheldFriendly" content="true">
-  <meta name="MobileOptimized" content="true">
+  <title>모바일 가로/세로 뷰포트 강제 설정</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=yes">
+
+  <style>
+    /* 기본 모바일 스타일 */
+      body { margin: 0; padding: 20px; font-family: sans-serif; }
+
+        /* 데스크탑 가로 모드 (1500px 기준) 스타일 */
+          body.landscape-mode {
+              background-color: #f0f8ff;
+                  width: 1500px; /* 강제할 가로 너비 */
+                    }
+
+                      /* 데스크탑 세로 모드 (900px 기준) 스타일 */
+                        body.portrait-mode {
+                            background-color: #fff0f5;
+                                width: 900px; /* 강제할 세로 너비 */
+                                  }
+                                  </style>
+                                  </head>
+                                  <body>
+
+                                  <div id="content">
+                                    현재 모바일 환경에서 데스크탑 뷰포트와 스타일이 강제로 적용되었습니다. 화면을 회전해 보세요!
+                                    </div>
+
+                                    <script>
+                                      function applyDesktopViewport() {
+                                          const metaViewport = document.querySelector('meta[name="viewport"]');
+                                              const body = document.body;
+
+                                                  // 모바일 기기 방향 감지
+                                                      if (window.orientation === 90 || window.orientation === -90) {
+                                                            // 가로 모드일 때: 1500px 뷰포트 적용
+                                                                  metaViewport.setAttribute('content', 'width=1500, initial-scale=0.6, maximum-scale=0.6, minimum-scale=0.6, user-scalable=yes');
+                                                                        body.className = 'landscape-mode';
+                                                                            } else {
+                                                                                  // 세로 모드일 때: 900px 뷰포트 적용
+                                                                                        metaViewport.setAttribute('content', 'width=900, initial-scale=0.6, maximum-scale=0.6, minimum-scale=0.6, user-scalable=yes');
+                                                                                              body.className = 'portrait-mode';
+                                                                                                  }
+                                                                                                    }
+
+                                                                                                      // 화면 회전 시 실행
+                                                                                                        window.addEventListener('orientationchange', applyDesktopViewport);
+                                                                                                          
+                                                                                                            // 페이지 로드 시 최초 실행
+                                                                                                              window.addEventListener('load', applyDesktopViewport);
+                                                                                                              </script>
+                                                                                                              <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
+</body>
+
+                                                                                                              </html>
+
+  <meta name="geo.region" content="JP"/>
+  <meta name="geo.country" content="JP"/>
+  <meta name="geo.placename" content="Tokyo"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes"/>
+  <meta name="HandheldFriendly" content="true"/>
+  <meta name="MobileOptimized" content="true"/>
   <title>GoldFireDragon UnCensored Browser</title>
 
   <!-- SEO / Social -->
-  <meta name="description" content="빠르고 안전한 프리미엄 브라우저 — GoldFireDragon UnCensored Browser">
-  <meta property="og:title" content="GoldFireDragon UnCensored Browser">
-  <meta property="og:description" content="빠르고 안전한 프리미엄 브라우저">
-  <meta property="og:url" content="https://www.onspace.ai">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="GoldFireDragon UnCensored Browser">
-  <meta property="og:image" content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="GoldFireDragon UnCensored Browser">
-  <meta name="twitter:description" content="빠르고 안전한 프리미엄 브라우저">
-  <meta name="twitter:image" content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg">
+  <meta name="description" content="빠르고 안전한 프리미엄 브라우저 — GoldFireDragon UnCensored Browser"/>
+  <meta property="og:title" content="GoldFireDragon UnCensored Browser"/>
+  <meta property="og:description" content="빠르고 안전한 프리미엄 브라우저"/>
+  <meta property="og:url" content="https://www.onspace.ai"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="GoldFireDragon UnCensored Browser"/>
+  <meta property="og:image" content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="GoldFireDragon UnCensored Browser"/>
+  <meta name="twitter:description" content="빠르고 안전한 프리미엄 브라우저"/>
+  <meta name="twitter:image" content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg"/>
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -232,8 +284,7 @@
 
   <!-- ══════════ VOICE MODAL ══════════ -->
   <div id="voice-modal" role="dialog" aria-modal="true" aria-label="음성 검색">
-    <div class="flex flex-col items-center gap-6 p-10 rounded-3xl"
-         style="background:rgba(12,4,28,0.97);border:1px solid rgba(192,132,252,0.4);backdrop-filter:blur(24px);">
+    <div class="flex flex-col items-center gap-6 p-10 rounded-3xl" style="background:rgba(12,4,28,0.97);border:1px solid rgba(192,132,252,0.4);backdrop-filter:blur(24px);">
       <p id="voice-status" class="text-purple-300 text-base">마이크 버튼을 눌러세요</p>
       <button id="voice-start-btn" class="voice-ring" title="녹음 시작" aria-label="음성 입력 시작">
         <i class="fa-solid fa-microphone text-4xl text-purple-300"></i>
@@ -248,14 +299,12 @@
     <div class="proxy-box">
       <p class="text-purple-300 font-bold text-base text-center">미러 사이트 열기</p>
       <p class="text-purple-400 text-xs text-center">CroxyProxy를 통해 URL을 우회합니다</p>
-      <input id="proxy-input" type="url" placeholder="https://example.com" autocomplete="off">
+      <input id="proxy-input" type="url" placeholder="https://example.com" autocomplete="off"/>
       <div class="flex gap-2 mt-1">
-        <button id="proxy-go-btn"
-          class="flex-1 py-2 bg-purple-600 hover:bg-purple-700 rounded-xl text-sm font-semibold transition">
+        <button id="proxy-go-btn" class="flex-1 py-2 bg-purple-600 hover:bg-purple-700 rounded-xl text-sm font-semibold transition">
           열기
         </button>
-        <button id="proxy-close-btn"
-          class="flex-1 py-2 bg-transparent border border-purple-500 hover:bg-purple-500/20 rounded-xl text-sm font-semibold transition text-purple-300">
+        <button id="proxy-close-btn" class="flex-1 py-2 bg-transparent border border-purple-500 hover:bg-purple-500/20 rounded-xl text-sm font-semibold transition text-purple-300">
           닫기
         </button>
       </div>
@@ -263,19 +312,14 @@
   </div>
 
   <!-- ══════════ TOP NAV ══════════ -->
-  <header class="flex justify-between items-center px-4 py-3 gap-2 z-50 flex-wrap"
-          style="background:linear-gradient(to bottom,rgba(0,0,0,0.88),transparent)">
+  <header class="flex justify-between items-center px-4 py-3 gap-2 z-50 flex-wrap" style="background:linear-gradient(to bottom,rgba(0,0,0,0.88),transparent)">
     <div class="japan-wifi">🇯🇵 Japan WiFi IP Connected • Proxy Active</div>
 
     <div class="flex items-center gap-2 flex-wrap justify-end">
-      <a href="https://mail.google.com" target="_blank" rel="noopener"
-         class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">Gmail</a>
-      <a href="https://images.google.co.jp" target="_blank" rel="noopener"
-         class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">이미지</a>
-      <a href="https://news.google.com" target="_blank" rel="noopener"
-         class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">뉴스</a>
-      <a href="https://maps.google.co.jp" target="_blank" rel="noopener"
-         class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">지도</a>
+      <a href="https://mail.google.com" target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">Gmail</a>
+      <a href="https://images.google.co.jp" target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">이미지</a>
+      <a href="https://news.google.com" target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">뉴스</a>
+      <a href="https://maps.google.co.jp" target="_blank" rel="noopener" class="text-sm text-purple-300 hover:text-white px-2 py-1 rounded hover:bg-white/10 transition whitespace-nowrap">지도</a>
 
       <!-- Apps Grid Button -->
       <button id="apps-btn" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 transition" title="앱 목록">
@@ -286,9 +330,7 @@
       <button id="toggle-main-btn" title="검색창 숨기기 / 보이기">👁️</button>
 
       <!-- Profile Avatar -->
-      <img src="https://cdn-ai.onspace.ai/onspace/project/uploads/cNeEsZ2cuNyHxmYfJ3dhx6/GoldFireDragonBrowser_logo-removebg-preview.png"
-           class="w-9 h-9 rounded-full cursor-pointer object-cover border-2 border-purple-500 hover:border-purple-300 transition"
-           alt="FireDragon 계정" title="FireDragon 계정" loading="lazy">
+      <img src="https://cdn-ai.onspace.ai/onspace/project/uploads/cNeEsZ2cuNyHxmYfJ3dhx6/GoldFireDragonBrowser_logo-removebg-preview.png" class="w-9 h-9 rounded-full cursor-pointer object-cover border-2 border-purple-500 hover:border-purple-300 transition" alt="FireDragon 계정" title="FireDragon 계정" loading="lazy"/>
     </div>
   </header>
 
@@ -296,24 +338,23 @@
   <div id="apps-popup" role="dialog" aria-label="앱 목록">
     <p class="text-purple-400 text-xs mb-3 font-semibold tracking-wide">빠른 링크</p>
     <div class="app-grid">
-      <a href="https://mail.google.com"    target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-envelope"></i>Gmail</a>
-      <a href="https://maps.google.co.jp"  target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-map-location-dot"></i>지도</a>
-      <a href="https://www.youtube.com"    target="_blank" rel="noopener" class="app-item"><i class="fa-brands fa-youtube"></i>YouTube</a>
-      <a href="https://news.google.com"    target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-newspaper"></i>뉴스</a>
+      <a href="https://mail.google.com" target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-envelope"></i>Gmail</a>
+      <a href="https://maps.google.co.jp" target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-map-location-dot"></i>지도</a>
+      <a href="https://www.youtube.com" target="_blank" rel="noopener" class="app-item"><i class="fa-brands fa-youtube"></i>YouTube</a>
+      <a href="https://news.google.com" target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-newspaper"></i>뉴스</a>
       <a href="https://translate.google.com" target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-language"></i>번역</a>
-      <a href="https://drive.google.com"   target="_blank" rel="noopener" class="app-item"><i class="fa-brands fa-google-drive"></i>드라이브</a>
+      <a href="https://drive.google.com" target="_blank" rel="noopener" class="app-item"><i class="fa-brands fa-google-drive"></i>드라이브</a>
       <a href="https://calendar.google.com" target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-calendar-days"></i>캘린더</a>
-      <a href="https://photos.google.com"  target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-images"></i>포토</a>
-      <a href="https://meet.google.com"    target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-video"></i>Meet</a>
+      <a href="https://photos.google.com" target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-images"></i>포토</a>
+      <a href="https://meet.google.com" target="_blank" rel="noopener" class="app-item"><i class="fa-solid fa-video"></i>Meet</a>
     </div>
   </div>
 
   <!-- ══════════ MAIN CONTENT ══════════ -->
   <main id="main-content" class="flex-1 flex flex-col items-center justify-center px-4 py-10">
-    <!-- Logo & Brand -->
+    <!-- Logo &amp; Brand -->
     <div class="mb-8 text-center select-none">
-      <img src="https://cdn-ai.onspace.ai/onspace/project/uploads/cNeEsZ2cuNyHxmYfJ3dhx6/GoldFireDragonBrowser_logo-removebg-preview.png"
-           style="width:clamp(90px,16vw,160px)" class="mx-auto drop-shadow-lg" draggable="false" alt="FireDragon Logo">
+      <img src="https://cdn-ai.onspace.ai/onspace/project/uploads/cNeEsZ2cuNyHxmYfJ3dhx6/GoldFireDragonBrowser_logo-removebg-preview.png" style="width:clamp(90px,16vw,160px)" class="mx-auto drop-shadow-lg" draggable="false" alt="FireDragon Logo"/>
       <h1 class="text-4xl md:text-5xl font-black tracking-widest mt-5 text-white drop-shadow-lg">
         GoldFireDragon UnCensored Browser
       </h1>
@@ -324,18 +365,12 @@
     <div class="w-full max-w-[680px] relative">
       <div class="search-bar flex items-center px-5 py-3">
         <i class="fa-solid fa-magnifying-glass text-lg text-purple-400 mr-4 flex-shrink-0"></i>
-        <input id="search-input" type="text"
-               class="flex-1 bg-transparent outline-none text-base md:text-lg placeholder:text-purple-400 text-purple-100 min-w-0"
-               placeholder="검색어 또는 URL을 입력하세요"
-               autocomplete="off" aria-label="검색어 입력">
-        <button id="clear-btn" class="hidden text-lg text-purple-300 hover:text-white mr-3 flex-shrink-0"
-                title="지우기" aria-label="검색어 지우기">✕</button>
-        <button id="voice-btn" class="text-lg text-purple-400 hover:text-white mr-3 flex-shrink-0 transition"
-                title="음성 검색" aria-label="음성 검색">
+        <input id="search-input" type="text" class="flex-1 bg-transparent outline-none text-base md:text-lg placeholder:text-purple-400 text-purple-100 min-w-0" placeholder="검색어 또는 URL을 입력하세요" autocomplete="off" aria-label="검색어 입력"/>
+        <button id="clear-btn" class="hidden text-lg text-purple-300 hover:text-white mr-3 flex-shrink-0" title="지우기" aria-label="검색어 지우기">✕</button>
+        <button id="voice-btn" class="text-lg text-purple-400 hover:text-white mr-3 flex-shrink-0 transition" title="음성 검색" aria-label="음성 검색">
           <i class="fa-solid fa-microphone"></i>
         </button>
-        <button id="lens-btn" class="text-lg text-purple-400 hover:text-white flex-shrink-0 transition"
-                title="Google Lens 이미지 검색" aria-label="Google Lens">
+        <button id="lens-btn" class="text-lg text-purple-400 hover:text-white flex-shrink-0 transition" title="Google Lens 이미지 검색" aria-label="Google Lens">
           <i class="fa-solid fa-camera"></i>
         </button>
       </div>
@@ -345,16 +380,13 @@
 
     <!-- Action Buttons -->
     <div class="flex justify-center gap-4 mt-6 flex-wrap">
-      <button id="search-btn"
-        class="px-8 py-3 bg-purple-600 hover:bg-purple-700 active:scale-95 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-purple-900/50 focus:outline-none focus:ring-2 focus:ring-purple-400">
+      <button id="search-btn" class="px-8 py-3 bg-purple-600 hover:bg-purple-700 active:scale-95 rounded-xl text-sm font-semibold transition-all shadow-lg shadow-purple-900/50 focus:outline-none focus:ring-2 focus:ring-purple-400">
         GoldFireDragon 검색
       </button>
-      <button id="lucky-btn"
-        class="px-8 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
-        I'm Feeling Lucky
+      <button id="lucky-btn" class="px-8 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
+        I&#39;m Feeling Lucky
       </button>
-      <button id="mirror-btn"
-        class="px-8 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
+      <button id="mirror-btn" class="px-8 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
         🌐 미러 사이트 열기
       </button>
     </div>
@@ -385,8 +417,7 @@
   </main>
 
   <!-- ══════════ FOOTER ══════════ -->
-  <footer class="py-5 text-center text-xs text-purple-500 border-t border-purple-900/30"
-          style="background:rgba(0,0,0,0.65)">
+  <footer class="py-5 text-center text-xs text-purple-500 border-t border-purple-900/30" style="background:rgba(0,0,0,0.65)">
     <nav class="flex justify-center gap-6 mb-2" aria-label="하단 링크">
       <a href="#" class="hover:text-purple-300 transition">개인정보처리방침</a>
       <a href="#" class="hover:text-purple-300 transition">서비스 약관</a>
@@ -691,7 +722,8 @@
     }
   });
   </script>
+
+
 <script>window.onload=function(){var d=document.createElement("div");d.id="appLoadFinished";document.body.appendChild(d);};</script>
 </body>
-
 </html>
