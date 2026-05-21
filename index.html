@@ -5,16 +5,18 @@
 
     <!-- All fonts settings -->
            <style>
-        /* 1. 폰트 등록 */
-        @font-face {
-            font-family: 'a큐티허니';
-           src: url("https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@main/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.ttf");
-           src: url("https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@main/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff");
-        }
+        <style>
+    /* 1. 폰트 등록 (주소 뒤에는 !important를 붙이지 않습니다) */
+    @font-face {
+        font-family: 'a큐티허니';
+        src: url("https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@main/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.ttf");
+        src: url("https://cdn.jsdelivr.net/gh/luckysexyqueen/GoldFireDragonUnCensoredBrowser@main/fonts/a%ED%81%90%ED%8B%B0%ED%97%88%EB%8B%88.woff");
+    }
 
-        /* 2. 다른 대체 폰트 없이 단독 강제 적용 */
-        body, h1, h2, h3, p, span, a, div {
-            font-family: 'a큐티허니' !important;
+    /* 2. 적용할 때 강제 지정 (여기에 !important를 붙입니다) */
+    body, h1, h2, h3, p, span, a, div, input, textarea {
+        font-family: 'a큐티허니' !important;
+
         }
 
         /* 3. 비디오 재생 버튼 숨기기 강제 적용 */
