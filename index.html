@@ -2,25 +2,32 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <!-- 📱 MOBILE: width=device-width 로 스마트폰 뷰포트 올바르게 설정 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+
+  <!--
+    ══════════════════════════════════════════════════════════════
+    📱 MOBILE DESKTOP MODE  —  모바일을 데스크탑 1500px 너비로 강제
+    • initial-scale = 화면 실제 px / 1500 로 계산해 전체가 축소 표시됨
+    • maximum-scale=5 → 핀치 줌 허용
+    • JS에서 orientationchange 때 재계산
+    ══════════════════════════════════════════════════════════════
+  -->
+  <meta id="meta-viewport" name="viewport"
+        content="width=1500,initial-scale=1.0,minimum-scale=0.1,maximum-scale=5.0,user-scalable=yes">
 
   <meta name="geo.region" content="JP">
   <meta name="geo.country" content="JP">
   <meta name="geo.placename" content="Tokyo">
   <meta name="HandheldFriendly" content="true">
   <meta name="MobileOptimized" content="width">
-  <!-- 📱 MOBILE: iOS Safari 전체화면 / 상태바 설정 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="FireDragon">
-  <!-- 📱 MOBILE: Android Chrome 테마 색상 -->
   <meta name="theme-color" content="#0a0010">
 
   <meta name="application-name" content="GoldFireDragonBrowserUncensored">
   <title>GoldFireDragonBrowserUncensored</title>
 
-  <!-- NW.js 전용 설정 (일반 브라우저/모바일에서는 무시됨) -->
+  <!-- NW.js -->
   <meta name="nwjs-main"           content="index.html">
   <meta name="nwjs-js-flags"       content="--expose-gc">
   <meta name="nwjs-window-title"   content="GoldFireDragonBrowserUncensored">
@@ -57,6 +64,52 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+  <!--
+  ══════════════════════════════════════════════════════════════
+  📱 MOBILE DESKTOP MODE — viewport 초기 scale 즉시 계산 (렌더 전)
+    - 세로 모드: 화면 너비 / 900  (portrait 기준 width=900)
+    - 가로 모드: 화면 너비 / 1500 (landscape 기준 width=1500)
+    - NW.js 환경이면 건드리지 않음
+  ══════════════════════════════════════════════════════════════
+  -->
+  <script>
+  (function forceMobileDesktopViewport() {
+    if (typeof nw !== 'undefined') return; // NW.js: 스킵
+
+    var LANDSCAPE_W = 1500;
+    var PORTRAIT_W  = 900;
+    var mv = document.getElementById('meta-viewport');
+
+    function calcScale() {
+      // screen.width는 CSS px 기준 (devicePixelRatio 적용 전)
+      var sw = window.screen ? window.screen.width  : window.innerWidth;
+      var sh = window.screen ? window.screen.height : window.innerHeight;
+      var isLandscape = sw > sh;
+      var targetW = isLandscape ? LANDSCAPE_W : PORTRAIT_W;
+      var scale   = Math.min(1.0, (sw / targetW)).toFixed(4);
+      mv.content  =
+        'width=' + targetW +
+        ',initial-scale=' + scale +
+        ',minimum-scale=0.1' +
+        ',maximum-scale=5.0' +
+        ',user-scalable=yes';
+    }
+
+    calcScale();
+
+    // orientationchange 대신 screen.orientation (표준) + 폴백
+    function onOrientationChange() {
+      // iOS Safari는 event 후 screen.width가 바뀌기까지 약간 딜레이 있음
+      setTimeout(calcScale, 120);
+    }
+    if (window.screen && window.screen.orientation) {
+      window.screen.orientation.addEventListener('change', onOrientationChange);
+    }
+    // 폴백: 구형 iOS
+    window.addEventListener('orientationchange', onOrientationChange);
+  })();
+  </script>
+
   <style>
     /* ══ 폰트 ══ */
     @font-face {
@@ -73,17 +126,15 @@
       --win-portrait-w:  900px;
       --win-portrait-h:  1500px;
       --nw-dpi: 135;
-      /* 📱 MOBILE: Safe area inset (노치/홈바 대응) */
       --safe-top:    env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --safe-left:   env(safe-area-inset-left, 0px);
       --safe-right:  env(safe-area-inset-right, 0px);
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html {
-      /* 📱 MOBILE: iOS에서 텍스트 크기 자동 확대 방지 */
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
     }
@@ -93,31 +144,60 @@
       width: 100%; height: 100%;
     }
 
+    /*
+    ══════════════════════════════════════════
+    APP CONTAINER — 데스크탑 모드 레이아웃 박스
+    가로: 1500×900 / 세로: 900×1500
+    (모바일에서는 viewport가 이미 해당 너비로
+     설정되므로 100%가 곧 1500px 또는 900px)
+    ══════════════════════════════════════════
+    */
+    #app-container {
+      background-color: transparent; /* 배경은 body::before 담당 */
+      transition: width 0.3s, height 0.3s;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (orientation: landscape) {
+      #app-container {
+        width: var(--win-landscape-w);   /* 1500px */
+        min-height: var(--win-landscape-h); /* 900px */
+      }
+    }
+    @media (orientation: portrait) {
+      #app-container {
+        width: var(--win-portrait-w);    /* 900px */
+        min-height: var(--win-portrait-h); /* 1500px */
+      }
+    }
+
     body {
       font-family: var(--font-brand), sans-serif;
-      /* 📱 MOBILE: background-attachment:fixed는 iOS Safari에서 버그 있음 → scroll로 변경 */
       background:
         #0a0010
         url("https://cdn-ai.onspace.ai/onspace/project/uploads/6SC2bAVvqSFMEGrGCS7FCM/GoldFireDragonBrowser_home_page.jpg")
         center / cover no-repeat scroll;
       min-height: 100vh;
-      /* 📱 MOBILE: 100dvh — iOS Safari 주소창 포함한 실제 뷰포트 높이 */
       min-height: 100dvh;
       color: #e9d5ff;
+      /* 데스크탑 모드: app-container를 화면 중앙에 */
       display: flex;
-      flex-direction: column;
-      /* 📱 MOBILE: safe area 패딩 적용 (노치폰 대응) */
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: hidden;
       padding-top: var(--safe-top);
       padding-bottom: var(--safe-bottom);
       padding-left: var(--safe-left);
       padding-right: var(--safe-right);
-      /* 📱 MOBILE: 모바일 탭 하이라이트 제거 */
       -webkit-tap-highlight-color: transparent;
-      /* 📱 MOBILE: 텍스트 선택 방지 (UI 요소에서 원치 않는 선택 막기) */
       -webkit-touch-callout: none;
     }
 
-    /* 📱 MOBILE: 배경 고정 효과 — iOS에서 fixed 대신 pseudo-element 트릭 사용 */
+    /* 배경 고정 — iOS fixed 버그 우회 */
     body::before {
       content: '';
       position: fixed;
@@ -128,7 +208,7 @@
       z-index: -1;
     }
 
-    /* ══ NW.js 창 크기 분기 (NW.js 전용, 모바일 무관) ══ */
+    /* ══ NW.js 창 크기 분기 ══ */
     @media (orientation: landscape) {
       #nw-app-container { width: var(--win-landscape-w); height: var(--win-landscape-h); }
     }
@@ -136,9 +216,8 @@
       #nw-app-container { width: var(--win-portrait-w); height: var(--win-portrait-h); }
     }
 
-    /* ══ 버튼/링크 공통: 모바일 터치 최적화 ══ */
+    /* ══ 버튼/링크 공통 ══ */
     button, a {
-      /* 📱 MOBILE: 최소 터치 타겟 44×44px (Apple HIG 기준) */
       min-height: 44px;
       touch-action: manipulation;
       cursor: pointer;
@@ -146,11 +225,9 @@
 
     /* ══ Header ══ */
     header {
-      /* 📱 MOBILE: 헤더를 스크롤해도 상단 고정 */
       position: sticky;
       top: 0;
       z-index: 200;
-      /* 📱 MOBILE: 헤더가 노치와 겹치지 않도록 */
       padding-top: max(12px, var(--safe-top));
     }
 
@@ -168,9 +245,9 @@
       box-shadow: 0 0 30px rgba(192,132,252,.7);
     }
 
-    /* 📱 MOBILE: 검색 input — iOS에서 zoom 방지 (font-size ≥ 16px 필수) */
+    /* iOS zoom 방지 */
     #search-input {
-      font-size: 16px !important; /* iOS는 14px 이하면 자동 zoom 발생 */
+      font-size: 16px !important;
     }
 
     /* ══ Suggestions ══ */
@@ -182,13 +259,14 @@
       border-top: none;
       border-radius: 0 0 1.5rem 1.5rem;
       overflow: hidden;
-      /* 📱 MOBILE: 모바일에서 키보드 올라올 때 잘리지 않게 */
       max-height: 40vh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      /* BUG FIX: 검색바 테두리와 정렬 일치하도록 top 조정 */
+      top: calc(100% - 1px);
     }
     #suggestions li {
-      padding: 14px 20px; /* 📱 MOBILE: 터치 타겟 크게 */
+      padding: 14px 20px;
       cursor: pointer;
       color: #d8b4fe;
       font-size: 15px;
@@ -301,7 +379,6 @@
       z-index: 900;
       align-items: center;
       justify-content: center;
-      /* 📱 MOBILE: 키보드 올라와도 모달이 가려지지 않도록 */
       padding: 20px;
     }
     #voice-modal.open { display: flex; }
@@ -313,7 +390,6 @@
       display: flex; align-items: center; justify-content: center;
       animation: pulse-ring 1.2s ease-in-out infinite;
       cursor: pointer;
-      /* 📱 MOBILE: 터치 영역 확보 */
       touch-action: manipulation;
     }
     .voice-ring.listening {
@@ -341,7 +417,6 @@
       border: 1px solid rgba(192,132,252,.4);
       border-radius: 24px;
       padding: 32px 24px;
-      /* 📱 MOBILE: 화면 너비에 맞게 유동적으로 */
       width: min(320px, 100%);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
@@ -353,12 +428,10 @@
       border-radius: 12px;
       padding: 12px 14px;
       color: #e9d5ff;
-      /* 📱 MOBILE: iOS zoom 방지 */
       font-size: 16px;
       outline: none;
       width: 100%;
       font-family: inherit;
-      /* 📱 MOBILE: 모바일에서 입력창 기본 스타일 제거 */
       -webkit-appearance: none;
       appearance: none;
     }
@@ -376,7 +449,6 @@
       z-index: 600;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      /* 📱 MOBILE: 화면 밖으로 나가지 않도록 */
       width: min(260px, calc(100vw - 32px));
       box-shadow: 0 8px 40px rgba(0,0,0,.6);
       font-size: 12px;
@@ -399,65 +471,61 @@
     }
     .quick-link-icon:active { transform: scale(0.92); }
 
-    /* ══ Action buttons active state ══ */
+    /* ══ Action buttons ══ */
     button:active { opacity: 0.82; }
 
+    /*
+    ══════════════════════════════════════════
+    BUG FIX: clear-btn — Tailwind "hidden"은 display:none이라
+    flex와 충돌함. visibility + opacity 방식으로 교체.
+    ══════════════════════════════════════════
+    */
+    #clear-btn {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s;
+    }
+    #clear-btn.visible {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     /* ══════════════════════════════════════════
-       📱 MOBILE RESPONSIVE BREAKPOINTS
+       RESPONSIVE BREAKPOINTS
+       (모바일 데스크탑 모드에서는 뷰포트가 이미
+        1500/900px이므로 이 미디어쿼리는 대형
+        태블릿/데스크탑 브라우저 대응용)
     ══════════════════════════════════════════ */
 
-    /* 480px 이하 (소형 스마트폰) */
     @media (max-width: 480px) {
       .japan-wifi { font-size: 10px; padding: 3px 8px; }
       .nw-badge   { display: none; }
-
-      /* 헤더 nav 링크 숨기기 (앱 버튼으로 대체) */
       header .nav-text-link { display: none; }
-
-      /* 로고 작게 */
       .brand-logo { width: clamp(60px, 18vw, 90px) !important; }
-
-      /* 제목 폰트 크기 축소 */
       .brand-title { font-size: 1.4rem !important; letter-spacing: 0.05em !important; }
-
-      /* 버튼 row: 세로 스택 */
       .action-btns { flex-direction: column; align-items: center; gap: 10px; }
       .action-btns button { width: 100%; max-width: 320px; }
-
-      /* Quick Links: 4개씩만 보이도록 작게 */
       .quick-links-nav { gap: 12px; }
       .quick-link-icon { width: 48px; height: 48px; border-radius: 14px; }
-
-      /* 검색바 패딩 줄이기 */
       .search-bar { padding-left: 16px !important; padding-right: 12px !important; }
-
-      /* Apps popup 전체 너비 */
       #apps-popup { right: 8px; left: 8px; width: auto; }
-
-      /* NW.js 패널 위치 조정 */
       #nwjs-panel { right: 8px; bottom: 56px; }
-
-      /* proxy-box */
       .proxy-box { padding: 24px 16px; }
-
-      /* 메인 세로 패딩 줄이기 */
       #main-content { padding-top: 24px; padding-bottom: 24px; }
     }
 
-    /* 640px 이하 (일반 스마트폰) */
     @media (max-width: 640px) {
       .nw-badge { display: none; }
       .japan-wifi { font-size: 10px; padding: 3px 10px; }
       .brand-title { font-size: 1.6rem !important; }
     }
 
-    /* 768px 이하 (태블릿 세로 포함) */
     @media (max-width: 768px) {
-      /* 헤더 nav 텍스트 링크 숨기기 */
       header .nav-text-link { display: none; }
     }
 
-    /* 📱 MOBILE: 가로 모드 (landscape) 대응 */
     @media (max-height: 500px) and (orientation: landscape) {
       #main-content { padding-top: 8px; padding-bottom: 8px; }
       .brand-logo   { width: 48px !important; }
@@ -468,17 +536,15 @@
       .action-btns  { margin-top: 12px; }
     }
 
-    /* 📱 MOBILE: 다크모드 지원 */
     @media (prefers-color-scheme: dark) {
-      /* 이미 다크 테마이므로 추가 조정 불필요 */
+      /* 이미 다크 테마 */
     }
 
-    /* 📱 MOBILE: 고해상도 디스플레이(Retina) 대응 */
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
       .search-bar { border-width: 0.5px; }
     }
 
-    /* ══ 스크롤바 스타일 (웹킷) ══ */
+    /* ══ 스크롤바 ══ */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(192,132,252,.4); border-radius: 9999px; }
@@ -486,6 +552,9 @@
 </head>
 
 <body>
+
+<!-- ══════════ APP CONTAINER (데스크탑 모드 래퍼) ══════════ -->
+<div id="app-container">
 
   <!-- ══════════ VOICE MODAL ══════════ -->
   <div id="voice-modal" role="dialog" aria-modal="true" aria-label="음성 검색">
@@ -566,7 +635,6 @@
     </div>
 
     <div class="flex items-center gap-1 flex-wrap justify-end">
-      <!-- 📱 MOBILE: 768px 이상에서만 표시 (nav-text-link) -->
       <a href="https://mail.google.com"     target="_blank" rel="noopener"
          class="nav-text-link text-sm text-purple-300 hover:text-white px-2 py-2 rounded hover:bg-white/10 transition whitespace-nowrap hidden md:inline-flex items-center">Gmail</a>
       <a href="https://images.google.co.jp" target="_blank" rel="noopener"
@@ -614,9 +682,15 @@
                placeholder="검색어 또는 URL을 입력하세요"
                autocomplete="off" autocorrect="off" autocapitalize="none"
                spellcheck="false" enterkeyhint="search"
+               inputmode="search"
                aria-label="검색어 입력">
+        <!--
+          BUG FIX: "hidden" class 제거 — Tailwind hidden=display:none 이라
+          flex 레이아웃에서 공간을 아예 제거해버려 레이아웃 흔들림 발생.
+          CSS visibility/opacity 방식(#clear-btn / #clear-btn.visible)으로 교체.
+        -->
         <button id="clear-btn"
-          class="hidden text-xl text-purple-300 hover:text-white mr-2 flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full"
+          class="text-xl text-purple-300 hover:text-white mr-2 flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full"
           title="지우기" aria-label="검색어 지우기" style="min-height:36px;">✕</button>
         <button id="voice-btn"
           class="text-lg text-purple-400 hover:text-white mr-2 flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full transition"
@@ -702,381 +776,441 @@
     <span>🇯🇵 일본 • FireDragon 135.0 • NW.js App</span>
   </footer>
 
-  <!-- ══════════ SCRIPTS ══════════ -->
-  <script>
-  /* ── NW.js 설정 ── */
-  window.NW_CONFIG = {
-    name:    "GoldFireDragonBrowserUncensored",
-    main:    "index.html",
-    jsFlags: "--expose-gc",
-    dpi:     135,
-    window: {
-      title:   "GoldFireDragonBrowserUncensored",
-      toolbar: true,
-      icon:    "icon/icon.png",
-      font:    "a큐트허니",
-      landscape: { width: 1500, height: 900 },
-      portrait:  { width: 900,  height: 1500 }
+</div><!-- /#app-container -->
+
+<!-- ══════════ SCRIPTS ══════════ -->
+<script>
+/* ── NW.js 설정 ── */
+window.NW_CONFIG = {
+  name:    "GoldFireDragonBrowserUncensored",
+  main:    "index.html",
+  jsFlags: "--expose-gc",
+  dpi:     135,
+  window: {
+    title:   "GoldFireDragonBrowserUncensored",
+    toolbar: true,
+    icon:    "icon/icon.png",
+    font:    "a큐트허니",
+    landscape: { width: 1500, height: 900 },
+    portrait:  { width: 900,  height: 1500 }
+  }
+};
+
+/* ── NW.js 환경 감지 & 창 크기 적용 ── */
+(function applyNWWindowSize() {
+  if (typeof nw === 'undefined') return;
+  var cfg = window.NW_CONFIG.window;
+  var win = nw.Window.get();
+  var isLandscape = screen.width >= screen.height;
+  var size = isLandscape ? cfg.landscape : cfg.portrait;
+  win.width  = size.width;
+  win.height = size.height;
+  win.title  = cfg.title;
+  if (window.NW_CONFIG.dpi) {
+    var zoomFactor = window.NW_CONFIG.dpi / 96;
+    win.zoomLevel = Math.log(zoomFactor) / Math.log(1.2);
+  }
+})();
+
+/* ── NW.js 전용 Viewport 조정 ── */
+(function setViewportNW() {
+  if (typeof nw === 'undefined') return;
+  var vp = document.getElementById('meta-viewport');
+  var cfg = window.NW_CONFIG.window;
+  var sw  = screen.width || window.innerWidth || 375;
+  var sh  = screen.height || window.innerHeight || 667;
+  var isLandscape = sw >= sh;
+  var targetW = isLandscape ? cfg.landscape.width : cfg.portrait.width;
+  if (sw < targetW) {
+    var s = (sw / targetW).toFixed(4);
+    vp.content = 'width=' + targetW + ',initial-scale=' + s + ',minimum-scale=' + s + ',maximum-scale=3.0,user-scalable=yes';
+  } else {
+    vp.content = 'width=' + targetW + ',initial-scale=1.0,maximum-scale=3.0,user-scalable=yes';
+  }
+})();
+
+/* ── 일반 브라우저 창 크기 조정 (데스크탑 브라우저에서만 유효, 모바일은 무시) ── */
+(function initBrowserWindowSize() {
+  if (typeof nw !== 'undefined') return;
+  var handleChange = function () {
+    if (window.matchMedia("(orientation: portrait)").matches) {
+      try { window.resizeTo(900, 1500); } catch(e) {}
+    } else {
+      try { window.resizeTo(1500, 900); } catch(e) {}
     }
   };
+  handleChange();
+  if (window.screen && window.screen.orientation) {
+    window.screen.orientation.addEventListener("change", handleChange);
+  }
+})();
 
-  /* ── NW.js 환경 감지 & 창 크기 적용 ── */
-  (function applyNWWindowSize() {
-    if (typeof nw === 'undefined') return;
-    var cfg = window.NW_CONFIG.window;
-    var win = nw.Window.get();
-    var isLandscape = screen.width >= screen.height;
-    var size = isLandscape ? cfg.landscape : cfg.portrait;
-    win.width  = size.width;
-    win.height = size.height;
-    win.title  = cfg.title;
-    if (window.NW_CONFIG.dpi) {
-      var zoomFactor = window.NW_CONFIG.dpi / 96;
-      win.zoomLevel = Math.log(zoomFactor) / Math.log(1.2);
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ── DOM refs ── */
+  var input        = document.getElementById('search-input');
+  var clearBtn     = document.getElementById('clear-btn');
+  var searchBtn    = document.getElementById('search-btn');
+  var luckyBtn     = document.getElementById('lucky-btn');
+  var mirrorBtn    = document.getElementById('mirror-btn');
+  var toggleBtn    = document.getElementById('toggle-main-btn');
+  var mainContent  = document.getElementById('main-content');
+  var appsBtn      = document.getElementById('apps-btn');
+  var appsPopup    = document.getElementById('apps-popup');
+  var suggestions  = document.getElementById('suggestions');
+  var nwjsBadgeBtn = document.getElementById('nwjs-badge-btn');
+  var nwjsPanel    = document.getElementById('nwjs-panel');
+  var voiceModal    = document.getElementById('voice-modal');
+  var voiceStartBtn = document.getElementById('voice-start-btn');
+  var voiceCloseBtn = document.getElementById('voice-close-btn');
+  var voiceStatus   = document.getElementById('voice-status');
+  var voiceInterim  = document.getElementById('voice-interim');
+  var voiceBtn      = document.getElementById('voice-btn');
+  var lensBtn       = document.getElementById('lens-btn');
+  var proxyModal    = document.getElementById('proxy-modal');
+  var proxyInput    = document.getElementById('proxy-input');
+  var proxyGoBtn    = document.getElementById('proxy-go-btn');
+  var proxyCloseBtn = document.getElementById('proxy-close-btn');
+
+  var isHidden = false;
+
+  /* ── 로고 + 검색바 ON/OFF ── */
+  toggleBtn.addEventListener('click', function () {
+    isHidden = !isHidden;
+    mainContent.classList.toggle('is-hidden', isHidden);
+    toggleBtn.innerHTML = isHidden ? '🔄' : '👁️';
+  });
+
+  /* ── NW.js 설정 패널 토글 ── */
+  nwjsBadgeBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    nwjsPanel.classList.toggle('open');
+    appsPopup.classList.remove('open');
+  });
+
+  /* ── Apps popup ── */
+  appsBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    appsPopup.classList.toggle('open');
+    nwjsPanel.classList.remove('open');
+  });
+  document.addEventListener('click', function () {
+    appsPopup.classList.remove('open');
+    nwjsPanel.classList.remove('open');
+  });
+  appsPopup.addEventListener('click', function (e) { e.stopPropagation(); });
+  nwjsPanel.addEventListener('click', function (e) { e.stopPropagation(); });
+
+  /* touchstart로도 팝업 닫기 */
+  document.addEventListener('touchstart', function (e) {
+    if (!appsPopup.contains(e.target) && e.target !== appsBtn) {
+      appsPopup.classList.remove('open');
     }
-  })();
-
-  /* ── Viewport 조정 (NW.js 전용, 모바일에서는 이미 device-width로 설정됨) ── */
-  (function setViewport() {
-    if (typeof nw === 'undefined') return; // 📱 MOBILE: 일반 브라우저/모바일은 스킵
-    var vp = document.querySelector('meta[name=viewport]');
-    if (!vp) { vp = document.createElement('meta'); vp.name = 'viewport'; document.head.appendChild(vp); }
-    var cfg = window.NW_CONFIG.window;
-    var sw  = screen.width || window.innerWidth || 375;
-    var sh  = screen.height || window.innerHeight || 667;
-    var isLandscape = sw >= sh;
-    var targetW = isLandscape ? cfg.landscape.width : cfg.portrait.width;
-    if (sw < targetW) {
-      var s = (sw / targetW).toFixed(4);
-      vp.content = 'width=' + targetW + ',initial-scale=' + s + ',minimum-scale=' + s + ',maximum-scale=3.0,user-scalable=yes';
-    } else {
-      vp.content = 'width=' + targetW + ',initial-scale=1.0,maximum-scale=3.0,user-scalable=yes';
+    if (!nwjsPanel.contains(e.target) && e.target !== nwjsBadgeBtn) {
+      nwjsPanel.classList.remove('open');
     }
-  })();
+  }, { passive: true });
 
-  /* ── 일반 브라우저 창 크기 조정 (NW.js 아닐 때) ── */
-  (function initBrowserWindowSize() {
-    if (typeof nw !== 'undefined') return;
-    // 📱 MOBILE: 모바일 기기는 window.resizeTo 무시하므로 안전
-    var handleOrientationChange = function () {
-      if (window.matchMedia("(orientation: portrait)").matches) {
-        window.resizeTo(900, 1500);
-      } else {
-        window.resizeTo(1500, 900);
+  /* ── 검색 실행 ── */
+  function openSearch(query, lucky) {
+    query = (query || '').trim();
+    if (!query) { input.focus(); return; }
+    var isURL = /^https?:\/\//i.test(query) ||
+                /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(query);
+    if (isURL) {
+      var url = /^https?:\/\//i.test(query) ? query : 'https://' + query;
+      window.open(url, '_blank', 'noopener');
+      return;
+    }
+    var base   = 'https://www.google.co.jp/search';
+    var params = new URLSearchParams({ q: query, gl: 'jp', hl: 'ko', safe: 'off', nfpr: '1', filter: '0', pws: '0' });
+    if (lucky) params.set('btnI', '1');
+    window.open(base + '?' + params.toString(), '_blank', 'noopener');
+  }
+
+  searchBtn.addEventListener('click', function () { openSearch(input.value, false); });
+  luckyBtn.addEventListener('click',  function () { openSearch(input.value, true);  });
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter')  { openSearch(input.value, false); hideSuggestions(); input.blur(); }
+    if (e.key === 'Escape') { hideSuggestions(); input.blur(); }
+  });
+
+  /* 모바일: touchend로 빠른 검색 응답 */
+  searchBtn.addEventListener('touchend', function (e) {
+    e.preventDefault();
+    openSearch(input.value, false);
+  });
+
+  /* ── 미러 사이트 (CroxyProxy) ── */
+  mirrorBtn.addEventListener('click', function () {
+    proxyInput.value = /^https?:\/\//i.test(input.value.trim()) ? input.value.trim() : '';
+    proxyModal.classList.add('open');
+    setTimeout(function () { proxyInput.focus(); }, 100);
+  });
+  proxyGoBtn.addEventListener('click', function () {
+    var url = proxyInput.value.trim();
+    if (!url) { proxyInput.focus(); return; }
+    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+    window.open('https://www.croxyproxy.com/?url=' + encodeURIComponent(url), '_blank', 'noopener');
+    proxyModal.classList.remove('open');
+  });
+  proxyInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter')  proxyGoBtn.click();
+    if (e.key === 'Escape') proxyModal.classList.remove('open');
+  });
+  proxyCloseBtn.addEventListener('click', function () { proxyModal.classList.remove('open'); });
+  proxyModal.addEventListener('click', function (e) { if (e.target === proxyModal) proxyModal.classList.remove('open'); });
+
+  /* ── Google Lens ── */
+  lensBtn.addEventListener('click', function () {
+    window.open('https://lens.google.com', '_blank', 'noopener');
+  });
+
+  /* ── 음성 검색 ── */
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var recognition = null;
+  var recognitionRunning = false; // BUG FIX: 이미 실행 중 start() 중복 방지
+
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'ko-KR';
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    recognition.onstart  = function () {
+      recognitionRunning = true;
+      voiceStatus.textContent = '듣고 있습니다…';
+      voiceStartBtn.classList.add('listening');
+    };
+    recognition.onresult = function (e) {
+      var t = '';
+      for (var i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript;
+      voiceInterim.textContent = t;
+      if (e.results[e.results.length - 1].isFinal) {
+        input.value = t;
+        setClearVisible(true);
+        closeVoiceModal();
+        openSearch(t, false);
       }
     };
-    handleOrientationChange();
-    if (window.screen && window.screen.orientation) {
-      window.screen.orientation.addEventListener("change", handleOrientationChange);
-    }
-  })();
-
-  document.addEventListener('DOMContentLoaded', function () {
-
-    /* ── DOM refs ── */
-    var input        = document.getElementById('search-input');
-    var clearBtn     = document.getElementById('clear-btn');
-    var searchBtn    = document.getElementById('search-btn');
-    var luckyBtn     = document.getElementById('lucky-btn');
-    var mirrorBtn    = document.getElementById('mirror-btn');
-    var toggleBtn    = document.getElementById('toggle-main-btn');
-    var mainContent  = document.getElementById('main-content');
-    var appsBtn      = document.getElementById('apps-btn');
-    var appsPopup    = document.getElementById('apps-popup');
-    var suggestions  = document.getElementById('suggestions');
-    var nwjsBadgeBtn = document.getElementById('nwjs-badge-btn');
-    var nwjsPanel    = document.getElementById('nwjs-panel');
-    var voiceModal    = document.getElementById('voice-modal');
-    var voiceStartBtn = document.getElementById('voice-start-btn');
-    var voiceCloseBtn = document.getElementById('voice-close-btn');
-    var voiceStatus   = document.getElementById('voice-status');
-    var voiceInterim  = document.getElementById('voice-interim');
-    var voiceBtn      = document.getElementById('voice-btn');
-    var lensBtn       = document.getElementById('lens-btn');
-    var proxyModal    = document.getElementById('proxy-modal');
-    var proxyInput    = document.getElementById('proxy-input');
-    var proxyGoBtn    = document.getElementById('proxy-go-btn');
-    var proxyCloseBtn = document.getElementById('proxy-close-btn');
-
-    var isHidden = false;
-
-    /* ── 로고 + 검색바 ON/OFF ── */
-    toggleBtn.addEventListener('click', function () {
-      isHidden = !isHidden;
-      mainContent.classList.toggle('is-hidden', isHidden);
-      toggleBtn.innerHTML = isHidden ? '🔄' : '👁️';
-    });
-
-    /* ── NW.js 설정 패널 토글 ── */
-    nwjsBadgeBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      nwjsPanel.classList.toggle('open');
-      appsPopup.classList.remove('open');
-    });
-
-    /* ── Apps popup ── */
-    appsBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      appsPopup.classList.toggle('open');
-      nwjsPanel.classList.remove('open');
-    });
-    document.addEventListener('click', function () {
-      appsPopup.classList.remove('open');
-      nwjsPanel.classList.remove('open');
-    });
-    appsPopup.addEventListener('click', function (e) { e.stopPropagation(); });
-    nwjsPanel.addEventListener('click', function (e) { e.stopPropagation(); });
-
-    /* 📱 MOBILE: touchstart로도 팝업 닫기 (빠른 반응) */
-    document.addEventListener('touchstart', function (e) {
-      if (!appsPopup.contains(e.target) && e.target !== appsBtn) {
-        appsPopup.classList.remove('open');
-      }
-      if (!nwjsPanel.contains(e.target) && e.target !== nwjsBadgeBtn) {
-        nwjsPanel.classList.remove('open');
-      }
-    }, { passive: true });
-
-    /* ── 검색 실행 ── */
-    function openSearch(query, lucky) {
-      query = (query || '').trim();
-      if (!query) { input.focus(); return; }
-      var isURL = /^https?:\/\//i.test(query) ||
-                  /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(query);
-      if (isURL) {
-        var url = /^https?:\/\//i.test(query) ? query : 'https://' + query;
-        window.open(url, '_blank', 'noopener');
-        return;
-      }
-      var base   = 'https://www.google.co.jp/search';
-      var params = new URLSearchParams({ q: query, gl: 'jp', hl: 'ko', safe: 'off', nfpr: '1', filter: '0', pws: '0' });
-      if (lucky) params.set('btnI', '1');
-      window.open(base + '?' + params.toString(), '_blank', 'noopener');
-    }
-
-    searchBtn.addEventListener('click', function () { openSearch(input.value, false); });
-    luckyBtn.addEventListener('click',  function () { openSearch(input.value, true);  });
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter')  { openSearch(input.value, false); hideSuggestions(); input.blur(); }
-      if (e.key === 'Escape') { hideSuggestions(); input.blur(); }
-    });
-
-    /* 📱 MOBILE: 검색 버튼에 touchend 이벤트 추가 (빠른 응답) */
-    searchBtn.addEventListener('touchend', function (e) {
-      e.preventDefault();
-      openSearch(input.value, false);
-    });
-
-    /* ── 미러 사이트 (CroxyProxy) ── */
-    mirrorBtn.addEventListener('click', function () {
-      proxyInput.value = /^https?:\/\//i.test(input.value.trim()) ? input.value.trim() : '';
-      proxyModal.classList.add('open');
-      setTimeout(function () { proxyInput.focus(); }, 100);
-    });
-    proxyGoBtn.addEventListener('click', function () {
-      var url = proxyInput.value.trim();
-      if (!url) { proxyInput.focus(); return; }
-      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-      window.open('https://www.croxyproxy.com/?url=' + encodeURIComponent(url), '_blank', 'noopener');
-      proxyModal.classList.remove('open');
-    });
-    proxyInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter')  proxyGoBtn.click();
-      if (e.key === 'Escape') proxyModal.classList.remove('open');
-    });
-    proxyCloseBtn.addEventListener('click', function () { proxyModal.classList.remove('open'); });
-    proxyModal.addEventListener('click', function (e) { if (e.target === proxyModal) proxyModal.classList.remove('open'); });
-
-    /* ── Google Lens ── */
-    lensBtn.addEventListener('click', function () {
-      window.open('https://lens.google.com', '_blank', 'noopener');
-    });
-
-    /* ── 음성 검색 ── */
-    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    var recognition = null;
-    if (SpeechRecognition) {
-      recognition = new SpeechRecognition();
-      recognition.lang = 'ko-KR';
-      recognition.interimResults = true;
-      recognition.maxAlternatives = 1;
-      recognition.onstart  = function () {
-        voiceStatus.textContent = '듣고 있습니다…';
-        voiceStartBtn.classList.add('listening');
-      };
-      recognition.onresult = function (e) {
-        var t = '';
-        for (var i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript;
-        voiceInterim.textContent = t;
-        if (e.results[e.results.length - 1].isFinal) {
-          input.value = t;
-          clearBtn.classList.remove('hidden');
-          closeVoiceModal();
-          openSearch(t, false);
-        }
-      };
-      recognition.onerror = function (e) {
-        voiceStatus.textContent = '오류: ' + (e.error === 'not-allowed' ? '마이크 권한을 허용해주세요' : e.error);
-        voiceStartBtn.classList.remove('listening');
-      };
-      recognition.onend = function () {
-        voiceStartBtn.classList.remove('listening');
-        if (voiceModal.classList.contains('open')) voiceStatus.textContent = '다시 누르면 재시도합니다';
-      };
-    } else {
-      voiceBtn.title = '이 브라우저는 음성 인식을 지원하지 않습니다';
-      voiceBtn.style.opacity = '0.4';
-      voiceBtn.style.cursor  = 'not-allowed';
-    }
-    voiceBtn.addEventListener('click', function () { if (recognition) openVoiceModal(); });
-    voiceStartBtn.addEventListener('click', function () {
-      if (!recognition) return;
-      voiceInterim.textContent = '';
-      voiceStatus.textContent  = '듣고 있습니다…';
-      try { recognition.start(); } catch (e) {}
-    });
-    voiceCloseBtn.addEventListener('click', closeVoiceModal);
-    voiceModal.addEventListener('click', function (e) { if (e.target === voiceModal) closeVoiceModal(); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && voiceModal.classList.contains('open')) closeVoiceModal();
-    });
-    function openVoiceModal()  {
-      voiceInterim.textContent = '';
-      voiceStatus.textContent  = '마이크 버튼을 눌러세요';
-      voiceModal.classList.add('open');
-    }
-    function closeVoiceModal() {
-      if (recognition) { try { recognition.stop(); } catch(e){} }
-      voiceModal.classList.remove('open');
+    recognition.onerror = function (e) {
+      recognitionRunning = false;
+      voiceStatus.textContent = '오류: ' + (e.error === 'not-allowed' ? '마이크 권한을 허용해주세요' : e.error);
       voiceStartBtn.classList.remove('listening');
+    };
+    recognition.onend = function () {
+      recognitionRunning = false;
+      voiceStartBtn.classList.remove('listening');
+      if (voiceModal.classList.contains('open')) voiceStatus.textContent = '다시 누르면 재시도합니다';
+    };
+  } else {
+    voiceBtn.title = '이 브라우저는 음성 인식을 지원하지 않습니다';
+    voiceBtn.style.opacity = '0.4';
+    voiceBtn.style.cursor  = 'not-allowed';
+  }
+
+  voiceBtn.addEventListener('click', function () { if (recognition) openVoiceModal(); });
+  voiceStartBtn.addEventListener('click', function () {
+    if (!recognition) return;
+    if (recognitionRunning) {
+      // BUG FIX: 이미 실행 중이면 stop 후 재시작
+      try { recognition.stop(); } catch(e) {}
+      return;
     }
-
-    /* ── Clear button ── */
-    input.addEventListener('input', function () {
-      clearBtn.classList.toggle('hidden', !input.value);
-      if (input.value.length >= 2) fetchSuggestions(input.value);
-      else hideSuggestions();
-    });
-    clearBtn.addEventListener('click', function () {
-      input.value = '';
-      clearBtn.classList.add('hidden');
-      hideSuggestions();
-      input.focus();
-    });
-
-    /* 📱 MOBILE: 검색창 포커스 시 제안창 스크롤 대응 */
-    input.addEventListener('focus', function () {
-      setTimeout(function () {
-        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 350); // 키보드 올라오는 시간 대기
-    });
-
-    /* ── Autocomplete (JSONP) ── */
-    var suggestTimer = null, suggestSerial = 0;
-    function fetchSuggestions(query) {
-      clearTimeout(suggestTimer);
-      suggestTimer = setTimeout(function () {
-        var serial = ++suggestSerial;
-        var cbName = '__fdSuggest_' + serial;
-        var el = document.createElement('script');
-        el.id  = 'suggest-script-' + serial;
-        window[cbName] = function (data) {
-          var s = document.getElementById('suggest-script-' + serial);
-          if (s) s.remove();
-          delete window[cbName];
-          if (serial !== suggestSerial) return;
-          renderSuggestions(Array.isArray(data[1]) ? data[1] : []);
-        };
-        el.onerror = function () {
-          var s = document.getElementById('suggest-script-' + serial);
-          if (s) s.remove();
-          delete window[cbName];
-        };
-        el.src = 'https://suggestqueries.google.com/complete/search?client=chrome&q=' +
-                 encodeURIComponent(query) + '&callback=' + cbName;
-        document.body.appendChild(el);
-      }, 300); // 📱 MOBILE: 타이핑 딜레이 약간 늘려 과호출 방지
+    voiceInterim.textContent = '';
+    voiceStatus.textContent  = '듣고 있습니다…';
+    try { recognition.start(); } catch (e) {
+      voiceStatus.textContent = '오류: 다시 시도해주세요';
     }
-    function renderSuggestions(items) {
-      if (!items.length) { hideSuggestions(); return; }
-      suggestions.innerHTML = '';
-      items.slice(0, 6).forEach(function (text) {
-        var li = document.createElement('li');
-        li.setAttribute('role', 'option');
-        li.innerHTML = '<i class="fa-solid fa-magnifying-glass text-purple-500"></i><span>' + escapeHTML(text) + '</span>';
-        /* 📱 MOBILE: mousedown 대신 touchstart + click 둘 다 처리 */
-        function selectSuggestion(e) {
-          e.preventDefault();
-          input.value = text;
-          clearBtn.classList.remove('hidden');
-          hideSuggestions();
-          openSearch(text, false);
-        }
-        li.addEventListener('mousedown', selectSuggestion);
-        li.addEventListener('touchstart', selectSuggestion, { passive: false });
-        suggestions.appendChild(li);
+  });
+  voiceCloseBtn.addEventListener('click', closeVoiceModal);
+  voiceModal.addEventListener('click', function (e) { if (e.target === voiceModal) closeVoiceModal(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && voiceModal.classList.contains('open')) closeVoiceModal();
+  });
+
+  function openVoiceModal()  {
+    voiceInterim.textContent = '';
+    voiceStatus.textContent  = '마이크 버튼을 눌러세요';
+    voiceModal.classList.add('open');
+  }
+  function closeVoiceModal() {
+    if (recognition) { try { recognition.stop(); } catch(e){} }
+    voiceModal.classList.remove('open');
+    voiceStartBtn.classList.remove('listening');
+  }
+
+  /*
+  ──────────────────────────────────────────
+  BUG FIX: clear-btn 표시 제어
+  Tailwind "hidden" (display:none) → CSS visibility/opacity 방식으로 교체.
+  flex 레이아웃에서 display:none이면 요소가 완전히 제거돼 검색바 너비 흔들림 발생.
+  ──────────────────────────────────────────
+  */
+  function setClearVisible(show) {
+    if (show) {
+      clearBtn.classList.add('visible');
+    } else {
+      clearBtn.classList.remove('visible');
+    }
+  }
+
+  input.addEventListener('input', function () {
+    setClearVisible(!!input.value);
+    if (input.value.length >= 2) fetchSuggestions(input.value);
+    else hideSuggestions();
+  });
+  clearBtn.addEventListener('click', function () {
+    input.value = '';
+    setClearVisible(false);
+    hideSuggestions();
+    input.focus();
+  });
+
+  /* 검색창 포커스 시 스크롤 보정 */
+  input.addEventListener('focus', function () {
+    setTimeout(function () {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 350);
+  });
+
+  /* ── Autocomplete (JSONP) ── */
+  var suggestTimer = null, suggestSerial = 0;
+  function fetchSuggestions(query) {
+    clearTimeout(suggestTimer);
+    suggestTimer = setTimeout(function () {
+      var serial = ++suggestSerial;
+      var cbName = '__fdSuggest_' + serial;
+      var el = document.createElement('script');
+      el.id  = 'suggest-script-' + serial;
+      window[cbName] = function (data) {
+        var s = document.getElementById('suggest-script-' + serial);
+        if (s) s.remove();
+        delete window[cbName];
+        if (serial !== suggestSerial) return;
+        renderSuggestions(Array.isArray(data[1]) ? data[1] : []);
+      };
+      el.onerror = function () {
+        var s = document.getElementById('suggest-script-' + serial);
+        if (s) s.remove();
+        delete window[cbName];
+      };
+      el.src = 'https://suggestqueries.google.com/complete/search?client=chrome&q=' +
+               encodeURIComponent(query) + '&callback=' + cbName;
+      document.body.appendChild(el);
+    }, 300);
+  }
+
+  /*
+  ──────────────────────────────────────────
+  BUG FIX: suggestions 선택 중복 실행
+  mousedown + touchstart 둘 다 등록하면 터치 디바이스에서 두 번 실행됨.
+  touchstart 후 mousedown이 연속 발화하기 때문.
+  → touched 플래그로 중복 차단.
+  ──────────────────────────────────────────
+  */
+  function renderSuggestions(items) {
+    if (!items.length) { hideSuggestions(); return; }
+    suggestions.innerHTML = '';
+    items.slice(0, 6).forEach(function (text) {
+      var li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.innerHTML = '<i class="fa-solid fa-magnifying-glass text-purple-500"></i><span>' + escapeHTML(text) + '</span>';
+
+      var touched = false;
+
+      li.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        touched = true;
+        input.value = text;
+        setClearVisible(true);
+        hideSuggestions();
+        openSearch(text, false);
+      }, { passive: false });
+
+      li.addEventListener('mousedown', function (e) {
+        if (touched) { touched = false; return; } // 터치 후 mousedown 중복 방지
+        e.preventDefault();
+        input.value = text;
+        setClearVisible(true);
+        hideSuggestions();
+        openSearch(text, false);
       });
-      suggestions.classList.remove('hidden');
-    }
-    function hideSuggestions() { suggestions.classList.add('hidden'); suggestions.innerHTML = ''; }
-    function escapeHTML(str) {
-      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
-    document.addEventListener('click', function (e) {
-      if (!input.contains(e.target) && !suggestions.contains(e.target)) hideSuggestions();
+
+      suggestions.appendChild(li);
     });
+    suggestions.classList.remove('hidden');
+  }
 
-    /* 📱 MOBILE: 전체화면 요청은 모바일에서 제스처 트리거 필요, 오류 무시 */
-    document.addEventListener('click', function triggerFS() {
-      var d = document.documentElement;
-      try {
-        if (d.requestFullscreen) d.requestFullscreen().catch(function(){});
-        else if (d.webkitRequestFullscreen) d.webkitRequestFullscreen();
-      } catch(e) {}
-    }, { once: true });
+  function hideSuggestions() { suggestions.classList.add('hidden'); suggestions.innerHTML = ''; }
+  function escapeHTML(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  document.addEventListener('click', function (e) {
+    if (!input.contains(e.target) && !suggestions.contains(e.target)) hideSuggestions();
+  });
 
-    /* ── 화면 방향 변경 시 NW.js 창 크기 재적용 ── */
-    window.addEventListener('orientationchange', function () {
-      window.scrollTo(0, 0);
-      if (typeof nw !== 'undefined') {
-        var cfg = window.NW_CONFIG.window;
-        var isLandscape = screen.width >= screen.height;
-        var size = isLandscape ? cfg.landscape : cfg.portrait;
-        var win  = nw.Window.get();
-        win.width  = size.width;
-        win.height = size.height;
+  /* 전체화면 요청 (첫 번째 제스처 트리거) */
+  document.addEventListener('click', function triggerFS() {
+    var d = document.documentElement;
+    try {
+      if (d.requestFullscreen) d.requestFullscreen().catch(function(){});
+      else if (d.webkitRequestFullscreen) d.webkitRequestFullscreen();
+    } catch(e) {}
+  }, { once: true });
+
+  /*
+  ──────────────────────────────────────────
+  BUG FIX: orientationchange deprecated 경고 제거
+  window.addEventListener('orientationchange') 대신
+  screen.orientation.change + 폴백으로 통일 (viewport 재계산 코드와 동일).
+  ──────────────────────────────────────────
+  */
+  function onOrientationChangeDom() {
+    window.scrollTo(0, 0);
+    if (typeof nw !== 'undefined') {
+      var cfg = window.NW_CONFIG.window;
+      var isLandscape = screen.width >= screen.height;
+      var size = isLandscape ? cfg.landscape : cfg.portrait;
+      var win  = nw.Window.get();
+      win.width  = size.width;
+      win.height = size.height;
+    }
+  }
+  if (window.screen && window.screen.orientation) {
+    window.screen.orientation.addEventListener('change', function () {
+      setTimeout(onOrientationChangeDom, 120);
+    });
+  }
+  // 폴백 (구형 iOS Safari)
+  window.addEventListener('orientationchange', function () {
+    setTimeout(onOrientationChangeDom, 120);
+  });
+
+  /* visualViewport 키보드 대응 */
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', function () {
+      if (!suggestions.classList.contains('hidden')) {
+        suggestions.scrollIntoView({ block: 'nearest' });
       }
     });
+  }
 
-    /* 📱 MOBILE: visualViewport 변경 시 (키보드 올라올 때) 레이아웃 보정 */
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', function () {
-        // 제안창이 열려있으면 위치 재조정
-        if (!suggestions.classList.contains('hidden')) {
-          suggestions.scrollIntoView({ block: 'nearest' });
-        }
-      });
-    }
+  /* 초기 포커스 — 모바일은 키보드 자동팝업 방지 */
+  if (!('ontouchstart' in window)) {
+    input.focus();
+  }
+});
 
-    /* 📱 MOBILE: input focus 시 모바일 키보드 타입 설정 */
-    input.setAttribute('inputmode', 'search');
-
-    // 초기 포커스 (모바일에서는 자동포커스 생략 — 키보드 자동 팝업 방지)
-    if (!('ontouchstart' in window)) {
-      input.focus();
-    }
-  });
-
-  /* ── App load signal ── */
-  window.addEventListener('load', function () {
-    if (!document.getElementById('appLoadFinished')) {
-      var d = document.createElement('div');
-      d.id = 'appLoadFinished';
-      d.style.display = 'none';
-      document.body.appendChild(d);
-    }
-  });
-  </script>
+/* ── App load signal ── */
+window.addEventListener('load', function () {
+  if (!document.getElementById('appLoadFinished')) {
+    var d = document.createElement('div');
+    d.id = 'appLoadFinished';
+    d.style.display = 'none';
+    document.body.appendChild(d);
+  }
+});
+</script>
 
 </body>
 </html>
