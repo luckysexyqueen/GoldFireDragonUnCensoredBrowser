@@ -1,39 +1,43 @@
-<!DOCTYPE html><html lang="ko"><head>
- <meta charset="UTF-8"/>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
 
-<titile>공통환경 기본설정들 <title>
-<meta name=툴바 viewport= toolbar= true>
-<meta name=최대화윈도우디드풀스크린 viewport= maximumizewindowedfullscreen= true>
-<meta name= 풀컬러RGB풀울트라HDR  FullColorRgbFullUltraHdr= true>
+  <!-- Common environment settings -->
+  <meta name="toolbar" content="true"/>
+  <meta name="maximize-window-fullscreen" content="true"/>
+  <meta name="full-color-rgb-ultra-hdr" content="true"/>
 
-<title> 데스크탑환경 기본설정들 <title>
-<meta name= 가로회전모드 viewport= width:1500, height: 900, dpi: 135>
-<meta name= 세로회전모드 viewport= width:900, height: 1500, dpi: 135>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title> 모바일환경 기본설정들 <title>
-<meta name= 가로회전모드 viewport= width:900, height: 1500, dpi: 135> 
-<meta name= 세로회전모드 viewport= width:1500, height: 900, dpi: 135>
+  <!-- Desktop environment: landscape 1500×900, portrait 900×1500, dpi= 135 -->
+  <meta name="desktop-landscape" content="width=1500, height=900, dpi=135"/>
+  <meta name="desktop-portrait"  content="width=900,  height=1500, dpi=135"/>
 
-<title> 골드파이어드래곤 무검열 브라우저 <title> 
-  <meta name="geo.region" content="JP"/>
-  <meta name="geo.country" content="JP"/>
+<!-- Mobile environment: landscape 900×1500, portrait 1500×900, dpi= 135 -->
+  <meta name="mobile-landscape" content="width=900,  height=1500,  dpi=135"/>
+  <meta name="mobile-portrait"  content="width=1500,  height=900,  dpi=135"/>
+
+  <title>GoldFireDragon UnCensored Browser</title>
+
+  <meta name="geo.region"    content="JP"/>
+  <meta name="geo.country"   content="JP"/>
   <meta name="geo.placename" content="Tokyo"/>
   <meta name="HandheldFriendly" content="true"/>
-  <meta name="MobileOptimized" content="true"/>
-  <title>GoldFireDragon UnCensored Browser</title>
+  <meta name="MobileOptimized"  content="true"/>
 
   <!-- SEO / Social -->
   <meta name="description" content="빠르고 안전한 프리미엄 브라우저 — GoldFireDragon UnCensored Browser"/>
-  <meta property="og:title" content="GoldFireDragon UnCensored Browser"/>
+  <meta property="og:title"       content="GoldFireDragon UnCensored Browser"/>
   <meta property="og:description" content="빠르고 안전한 프리미엄 브라우저"/>
-  <meta property="og:url" content="https://www.onspace.ai"/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:site_name" content="GoldFireDragon UnCensored Browser"/>
-  <meta property="og:image" content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="GoldFireDragon UnCensored Browser"/>
+  <meta property="og:url"         content="https://www.onspace.ai"/>
+  <meta property="og:type"        content="website"/>
+  <meta property="og:site_name"   content="GoldFireDragon UnCensored Browser"/>
+  <meta property="og:image"       content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg"/>
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="twitter:title"       content="GoldFireDragon UnCensored Browser"/>
   <meta name="twitter:description" content="빠르고 안전한 프리미엄 브라우저"/>
-  <meta name="twitter:image" content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg"/>
+  <meta name="twitter:image"       content="https://cdn-ai.onspace.ai/onspace/project/screenshot/online/pre-site/9bhrqx.jpg"/>
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -312,7 +316,7 @@
 
   <!-- ══════════ MAIN CONTENT ══════════ -->
   <main id="main-content" class="flex-1 flex flex-col items-center justify-center px-4 py-10">
-    <!-- Logo &amp; Brand -->
+    <!-- Logo & Brand -->
     <div class="mb-8 text-center select-none">
       <img src="https://cdn-ai.onspace.ai/onspace/project/uploads/cNeEsZ2cuNyHxmYfJ3dhx6/GoldFireDragonBrowser_logo-removebg-preview.png" style="width:clamp(90px,16vw,160px)" class="mx-auto drop-shadow-lg" draggable="false" alt="FireDragon Logo"/>
       <h1 class="text-4xl md:text-5xl font-black tracking-widest mt-5 text-white drop-shadow-lg">
@@ -344,7 +348,7 @@
         GoldFireDragon 검색
       </button>
       <button id="lucky-btn" class="px-8 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
-        I&#39;m Feeling Lucky
+        I'm Feeling Lucky
       </button>
       <button id="mirror-btn" class="px-8 py-3 bg-transparent border border-purple-400 hover:bg-purple-500/20 active:scale-95 rounded-xl text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-purple-400">
         🌐 미러 사이트 열기
@@ -683,5 +687,5 @@
   });
   </script>
 
-
-</body></html>
+</body>
+</html>
