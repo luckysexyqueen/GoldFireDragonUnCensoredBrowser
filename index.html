@@ -5,7 +5,7 @@
   <meta name="toolbar" content="true"/>
   <meta name="maximize-window-fullscreen" content="true"/>
   <meta name="full-color-rgb-ultra-hdr" content="true"/>
- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
 
   <!-- Desktop environment: landscape 1500×900, portrait 900×1500, dpi= 135 -->
   <meta name="desktop-landscape" content="width=1500, height=900, dpi=135"/>
@@ -481,7 +481,7 @@
       var url = proxyInput.value.trim();
       if (!url) { proxyInput.focus(); return; }
       if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-      var proxyUrl = 'https://www.croxyproxy.com/requests/get?requestType=https&url=' + encodeURIComponent(url);
+      var proxyUrl = 'https://www.croxyproxy.com/_ko' + encodeURIComponent(url);
       window.open(proxyUrl, '_blank', 'noopener');
       proxyModal.classList.remove('open');
     });
@@ -683,6 +683,7 @@
     }
   });
   </script>
+
 
 
 
