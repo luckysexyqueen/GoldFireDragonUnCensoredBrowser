@@ -683,12 +683,10 @@
           if (e.key === 'Escape') { hideSuggestions(); }
         });
 
-        /* ── BUG FIX 1: 미러 사이트 버튼 — 깨진 이벤트 리스너 복구 ── */
-        mirrorBtn.addEventListener('click', function () {
-          proxyModal.classList.add('open');
-          proxyInput.value = '';
-          setTimeout(function () { proxyInput.focus(); }, 100);
-        });
+/* ── 미러 사이트 버튼 (직접 CroxyProxy 한국어 페이지로 이동) ── */
+mirrorBtn.addEventListener('click', function () {
+    window.open('https://www.croxyproxy.com/_ko/', '_blank', 'noopener');
+});
 
         /* ── BUG FIX 2: Proxy 모달 버튼 이벤트 리스너 추가 ── */
         proxyGoBtn.addEventListener('click', function () {
