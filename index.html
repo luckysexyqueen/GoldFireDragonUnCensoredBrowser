@@ -1,5 +1,58 @@
-<!DOCTYPE html><html lang="ko"><head>
-  <meta charset="UTF-8"/>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>모바일 가로/세로 뷰포트 강제 설정</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=yes">
+
+<style>
+  /* 기본 모바일 스타일 */
+  body { margin: 0; padding: 20px; font-family: sans-serif; }
+
+  /* 데스크탑 가로 모드 (1500px 기준) 스타일 */
+  body.landscape-mode {
+    background-color: #f0f8ff;
+    width: 1500px; /* 강제할 가로 너비 */
+  }
+
+  /* 데스크탑 세로 모드 (900px 기준) 스타일 */
+  body.portrait-mode {
+    background-color: #fff0f5;
+    width: 900px; /* 강제할 세로 너비 */
+  }
+</style>
+</head>
+<body>
+
+<div id="content">
+  현재 모바일 환경에서 데스크탑 뷰포트와 스타일이 강제로 적용되었습니다. 화면을 회전해 보세요!
+</div>
+
+<script>
+  function applyDesktopViewport() {
+    const metaViewport = document.querySelector('meta[name="viewport"]');
+    const body = document.body;
+
+    // 모바일 기기 방향 감지
+    if (window.orientation === 90 || window.orientation === -90) {
+      // 가로 모드일 때: 1500px 뷰포트 적용
+      metaViewport.setAttribute('content', 'width=1500, initial-scale=0.6, maximum-scale=0.6, minimum-scale=0.6, user-scalable=yes');
+      body.className = 'landscape-mode';
+    } else {
+      // 세로 모드일 때: 900px 뷰포트 적용
+      metaViewport.setAttribute('content', 'width=900, initial-scale=0.6, maximum-scale=0.6, minimum-scale=0.6, user-scalable=yes');
+      body.className = 'portrait-mode';
+    }
+  }
+
+  // 화면 회전 시 실행
+  window.addEventListener('orientationchange', applyDesktopViewport);
+  
+  // 페이지 로드 시 최초 실행
+  window.addEventListener('load', applyDesktopViewport);
+</script>
+</body>
+
   <meta name="geo.region" content="JP"/>
   <meta name="geo.country" content="JP"/>
   <meta name="geo.placename" content="Tokyo"/>
